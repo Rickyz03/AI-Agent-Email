@@ -26,6 +26,8 @@ Obiettivo: risparmiare tempo nella gestione della posta elettronica, generando b
 
 ## 📂 Struttura progetto (iniziale)
 
+```
+
 AI-Agent-Email/
 │── backend/
 │   ├── main.py          # API FastAPI
@@ -36,6 +38,8 @@ AI-Agent-Email/
 │
 │── README.md
 │── .gitignore
+
+````
 
 ---
 
@@ -79,12 +83,3 @@ AI-Agent-Email/
 * `chromadb`
 * `langchain`
 * `pydantic`
-
----
-
-## ✅ Prossimi step
-
-* [ ] Ingestione email via IMAP.
-* [ ] Definizione schema DB (threads, emails, kb\_docs, ecc.).
-* [ ] Integrazione Vector DB (Chroma).
-* [ ] Generazione bozze via LLM.
