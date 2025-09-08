@@ -27,7 +27,6 @@ Obiettivo: risparmiare tempo nella gestione della posta elettronica, generando b
 ## 📂 Struttura progetto (iniziale)
 
 ```
-
 AI-Agent-Email/
 │── backend/
 │   ├── main.py          # API FastAPI
@@ -38,7 +37,6 @@ AI-Agent-Email/
 │
 │── README.md
 │── .gitignore
-
 ````
 
 ---
