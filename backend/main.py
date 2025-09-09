@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from .db import SessionLocal, Base, engine
-from .models import Email, Thread
+from db import SessionLocal, Base, engine
+from models import Email, Thread
 
 # Crea le tabelle (solo per dev, in prod usa Alembic)
 Base.metadata.create_all(bind=engine)

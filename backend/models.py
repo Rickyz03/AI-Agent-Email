@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, ARRAY
 from sqlalchemy.orm import relationship
-from .db import Base
+from db import Base
 import datetime
 
 class Thread(Base):
