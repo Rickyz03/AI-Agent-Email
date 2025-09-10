@@ -29,15 +29,53 @@ Obiettivo: risparmiare tempo nella gestione della posta elettronica, generando b
 ```
 AI-Agent-Email/
 │── backend/
-│   ├── main.py          # API FastAPI
-│   ├── models.py        # Modelli Pydantic + ORM
-│   ├── db.py            # Connessione al DB
-│   ├── vectorstore.py   # Gestione embeddings con Chroma
-│   └── requirements.txt
+│   ├── main.py                # Entrypoint FastAPI con routing e orchestrazione pipeline
+│   │  
+│   ├── db.py                  # Connessione al DB Postgres + SessionLocal
+│   ├── models.py              # Modelli SQLAlchemy (Email, Thread, Preferences, Events, ecc.)
+│   ├── schemas.py             # Schemi Pydantic per request/response API
+│   │  
+│   ├── ingestion/  
+│   │   ├── __init__.py  
+│   │   ├── imap_client.py     # Connessione IMAP, polling email
+│   │   ├── gmail_api.py       # Integrazione Gmail API (OAuth2)
+│   │   └── parser.py          # Parsing email, allegati, pulizia HTML → testo
+│   │  
+│   ├── pipeline/  
+│   │   ├── __init__.py  
+│   │   ├── preprocess.py      # Pulizia corpo messaggio, firme, quote
+│   │   ├── classifier.py      # Intent/priority classifier (ML/LLM)
+│   │   ├── retriever.py       # Costruzione contesto (thread + KB) con RAG
+│   │   ├── generator.py       # Generazione bozze con LLM
+│   │   └── guardrails.py      # Validazioni, filtri PII, fallback
+│   │  
+│   ├── rag/  
+│   │   ├── __init__.py  
+│   │   ├── vector_store.py    # Gestione embeddings con Chroma/pgvector
+│   │   ├── embeddings.py      # Creazione embeddings (OpenAI, sentence-transformers, ecc.)
+│   │   └── knowledge_base.py  # Gestione documenti KB e chunking
+│   │  
+│   ├── feedback/  
+│   │   ├── __init__.py  
+│   │   ├── logger.py          # Log eventi feedback (bozze accettate, editate, scartate)
+│   │   └── updater.py         # Aggiornamento preferenze, template, few-shot dinamici
+│   │  
+│   ├── utils/  
+│   │   ├── __init__.py  
+│   │   ├── settings.py        # Configurazioni (dotenv/env vars)
+│   │   ├── security.py        # Crittografia, gestione segreti, policy privacy
+│   │   └── templates.py       # Template standard di email e fallback
+│   │  
+│   ├── tests/  
+│   │   ├── __init__.py  
+│   │   ├── test_api.py        # Test endpoint FastAPI
+│   │   ├── test_pipeline.py   # Test pipeline end-to-end
+│   │   └── test_db.py         # Test modelli e DB
+│   └── requirements.txt       # Dipendenze Python del progetto
 │
-│── README.md
-│── .gitignore
-│── LICENSE
+├── README.md                  # Documentazione principale del progetto
+├── .gitignore                 # File e cartelle da escludere dal version control
+└── LICENSE                    # Licenza del software
 ````
 
 ---
