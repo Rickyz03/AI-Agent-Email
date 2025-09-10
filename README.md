@@ -37,6 +37,7 @@ AI-Agent-Email/
 │
 │── README.md
 │── .gitignore
+│── LICENSE
 ````
 
 ---
