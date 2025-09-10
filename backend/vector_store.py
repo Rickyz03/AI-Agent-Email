@@ -1,12 +1,12 @@
 from chromadb import Client
 from chromadb.config import Settings
 
-# Inizializza client Chroma
+# Initialize Chroma client
 client = Client(Settings(
-    persist_directory=".chroma"  # cartella locale dove salvare il DB vettoriale
+    persist_directory=".chroma"  # local folder where to save the vector DB
 ))
 
-# Crea una collection (se non esiste)
+# Create a collection (if it doesn't exist)
 collection = client.get_or_create_collection("emails")
 
 def add_embedding(id: str, embedding: list[float], metadata: dict):

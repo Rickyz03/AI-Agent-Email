@@ -3,12 +3,12 @@ from pydantic import BaseModel
 from db import SessionLocal, Base, engine
 from models import Email, Thread
 
-# Crea le tabelle (solo per dev, in prod usa Alembic)
+# Create tables (only for dev, use Alembic in prod)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Schemi Pydantic
+# Pydantic schemas
 class EmailIn(BaseModel):
     thread_id: int
     subject: str
@@ -31,11 +31,11 @@ def draft_email(email: EmailIn):
     # TODO: preprocess, classify, retrieve, generate, guardrails
     return DraftOut(
         variants=[
-            "Grazie per la tua email, ti risponderemo presto.",
-            "Abbiamo ricevuto la tua richiesta, stiamo verificando.",
-            "La tua email è stata presa in carico."
+            "Thank you for your email, we will respond soon.",
+            "We have received your request, we are verifying.",
+            "Your email has been taken into consideration."
         ],
         intent="informational",
         priority="low",
-        summary=f"Bozza automatica per: {email.subject}"
+        summary=f"Automatic draft for: {email.subject}"
     )

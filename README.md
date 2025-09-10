@@ -1,93 +1,93 @@
 # AI Agent Email ✉️🤖
 
-Un agente intelligente che legge le email e propone risposte automatiche.  
-Obiettivo: risparmiare tempo nella gestione della posta elettronica, generando bozze pronte da inviare, con coerenza di tono, lingua e contesto.
+An intelligent agent that reads emails and proposes automatic replies.  
+Goal: save time in email management by generating ready-to-send drafts with consistent tone, language, and context.
 
 ---
 
-## 🚀 Funzionalità (MVP)
-- Ingestione email da provider (IMAP/Gmail API).
-- Preprocess: pulizia corpo messaggio, rimozione firme e quote.
-- Classificazione intent/priorità (richiesta info, reclamo, spam, ecc.).
-- Generazione bozze (3 varianti: breve, standard, dettagliata) tramite LLM.
-- UI web minimale per visualizzare thread e bozze.
-- Feedback loop per apprendere dalle correzioni.
+## 🚀 Features (MVP)
+- Email ingestion from providers (IMAP/Gmail API).
+- Preprocessing: message body cleaning, signature and quote removal.
+- Intent/priority classification (info request, complaint, spam, etc.).
+- Draft generation (3 variants: brief, standard, detailed) via LLM.
+- Minimal web UI to view threads and drafts.
+- Feedback loop to learn from corrections.
 
 ---
 
 ## 🛠️ Tech Stack
 - **Backend**: [FastAPI](https://fastapi.tiangolo.com/) (Python 3.10+).
-- **Database relazionale**: PostgreSQL (storage email/threads).
-- **Vector DB**: [Chroma](https://www.trychroma.com/) (per embeddings e retrieval).
-- **Orchestrazione LLM**: LangChain / LangGraph.
-- **Frontend (in seguito)**: React/Next.js.
+- **Relational Database**: PostgreSQL (email/threads storage).
+- **Vector DB**: [Chroma](https://www.trychroma.com/) (for embeddings and retrieval).
+- **LLM Orchestration**: LangChain / LangGraph.
+- **Frontend (later)**: React/Next.js.
 
 ---
 
-## 📂 Struttura progetto (iniziale)
+## 📂 Project Structure (initial)
 
 ```
 AI-Agent-Email/
 │── backend/
-│   ├── main.py                # Entrypoint FastAPI con routing e orchestrazione pipeline
+│   ├── main.py                # FastAPI entrypoint with routing and pipeline orchestration
 │   │  
-│   ├── db.py                  # Connessione al DB Postgres + SessionLocal
-│   ├── models.py              # Modelli SQLAlchemy (Email, Thread, Preferences, Events, ecc.)
-│   ├── schemas.py             # Schemi Pydantic per request/response API
+│   ├── db.py                  # Postgres DB connection + SessionLocal
+│   ├── models.py              # SQLAlchemy models (Email, Thread, Preferences, Events, etc.)
+│   ├── schemas.py             # Pydantic schemas for API request/response
 │   │  
 │   ├── ingestion/  
 │   │   ├── __init__.py  
-│   │   ├── imap_client.py     # Connessione IMAP, polling email
-│   │   ├── gmail_api.py       # Integrazione Gmail API (OAuth2)
-│   │   └── parser.py          # Parsing email, allegati, pulizia HTML → testo
+│   │   ├── imap_client.py     # IMAP connection, email polling
+│   │   ├── gmail_api.py       # Gmail API integration (OAuth2)
+│   │   └── parser.py          # Email parsing, attachments, HTML → text cleaning
 │   │  
 │   ├── pipeline/  
 │   │   ├── __init__.py  
-│   │   ├── preprocess.py      # Pulizia corpo messaggio, firme, quote
+│   │   ├── preprocess.py      # Message body cleaning, signatures, quotes
 │   │   ├── classifier.py      # Intent/priority classifier (ML/LLM)
-│   │   ├── retriever.py       # Costruzione contesto (thread + KB) con RAG
-│   │   ├── generator.py       # Generazione bozze con LLM
-│   │   └── guardrails.py      # Validazioni, filtri PII, fallback
+│   │   ├── retriever.py       # Context building (thread + KB) with RAG
+│   │   ├── generator.py       # Draft generation with LLM
+│   │   └── guardrails.py      # Validations, PII filters, fallbacks
 │   │  
 │   ├── rag/  
 │   │   ├── __init__.py  
-│   │   ├── vector_store.py    # Gestione embeddings con Chroma/pgvector
-│   │   ├── embeddings.py      # Creazione embeddings (OpenAI, sentence-transformers, ecc.)
-│   │   └── knowledge_base.py  # Gestione documenti KB e chunking
+│   │   ├── vector_store.py    # Embeddings management with Chroma/pgvector
+│   │   ├── embeddings.py      # Embeddings creation (OpenAI, sentence-transformers, etc.)
+│   │   └── knowledge_base.py  # KB documents management and chunking
 │   │  
 │   ├── feedback/  
 │   │   ├── __init__.py  
-│   │   ├── logger.py          # Log eventi feedback (bozze accettate, editate, scartate)
-│   │   └── updater.py         # Aggiornamento preferenze, template, few-shot dinamici
+│   │   ├── logger.py          # Feedback events logging (drafts accepted, edited, discarded)
+│   │   └── updater.py         # Preferences, templates, dynamic few-shot updates
 │   │  
 │   ├── utils/  
 │   │   ├── __init__.py  
-│   │   ├── settings.py        # Configurazioni (dotenv/env vars)
-│   │   ├── security.py        # Crittografia, gestione segreti, policy privacy
-│   │   └── templates.py       # Template standard di email e fallback
+│   │   ├── settings.py        # Configurations (dotenv/env vars)
+│   │   ├── security.py        # Encryption, secrets management, privacy policies
+│   │   └── templates.py       # Standard email templates and fallbacks
 │   │  
 │   ├── tests/  
 │   │   ├── __init__.py  
-│   │   ├── test_api.py        # Test endpoint FastAPI
-│   │   ├── test_pipeline.py   # Test pipeline end-to-end
-│   │   └── test_db.py         # Test modelli e DB
-│   └── requirements.txt       # Dipendenze Python del progetto
+│   │   ├── test_api.py        # FastAPI endpoint tests
+│   │   ├── test_pipeline.py   # End-to-end pipeline tests
+│   │   └── test_db.py         # Model and DB tests
+│   └── requirements.txt       # Python project dependencies
 │
-├── README.md                  # Documentazione principale del progetto
-├── .gitignore                 # File e cartelle da escludere dal version control
-└── LICENSE                    # Licenza del software
+├── README.md                  # Main project documentation
+├── .gitignore                 # Files and folders to exclude from version control
+└── LICENSE                    # Software license
 ````
 
 ---
 
-## ⚙️ Setup locale (dev)
-1. Clona il repo:
+## ⚙️ Local Setup (dev)
+1. Clone the repo:
    ```bash
    git clone https://github.com/Rickyz03/AI-Agent-Email.git
    cd AI-Agent-Email/backend
    ```
 
-2. Crea ed attiva un virtualenv:
+2. Create and activate a virtualenv:
 
    ```bash
    python -m venv venv
@@ -95,28 +95,29 @@ AI-Agent-Email/
    venv\Scripts\activate      # Windows
    ```
 
-3. Installa le dipendenze:
+3. Install dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Avvia il server:
+4. Start the server:
 
    ```bash
    uvicorn main:app --reload
    ```
 
-   API disponibili su: [http://localhost:8000/docs](http://localhost:8000/docs)
+   APIs available at: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
-## 📦 Dipendenze principali (requirements.txt)
+## 📦 Main Dependencies (requirements.txt)
 
 * `fastapi`
 * `uvicorn`
-* `psycopg2-binary` (driver PostgreSQL)
+* `psycopg2-binary` (PostgreSQL driver)
 * `sqlalchemy` (ORM)
 * `chromadb`
 * `langchain`
 * `pydantic`
+
