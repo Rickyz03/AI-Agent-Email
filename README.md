@@ -71,6 +71,8 @@ AI-Agent-Email/
 │   │   ├── test_api.py        # FastAPI endpoint tests
 │   │   ├── test_pipeline.py   # End-to-end pipeline tests
 │   │   └── test_db.py         # Model and DB tests
+|   |
+|   ├── .env                   # Environment variables configuration
 │   └── requirements.txt       # Python project dependencies
 │
 ├── README.md                  # Main project documentation
