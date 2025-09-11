@@ -1,41 +1,50 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, Depends
+from sqlalchemy.orm import Session
+
 from db import SessionLocal, Base, engine
 from models import Email, Thread
+from schemas import EmailIn, DraftOut
+from pipeline.preprocess import preprocess_body
+from pipeline.classifier import classify_intent_priority
+from pipeline.retriever import build_context
+from pipeline.generator import generate_drafts
+from pipeline.guardrails import validate_drafts, fallback_template
 
-# Create tables (only for dev, use Alembic in prod)
+# Create tables in dev (use Alembic in production)
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(title="AI Agent Email", version="1.0.0")
 
-# Pydantic schemas
-class EmailIn(BaseModel):
-    thread_id: int
-    subject: str
-    body: str
-    from_addr: str
-    to_addrs: list[str]
 
-class DraftOut(BaseModel):
-    variants: list[str]
-    intent: str
-    priority: str
-    summary: str
+# Dependency for DB session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 @app.get("/")
 def root():
     return {"message": "AI Agent Email is running 🚀"}
 
+
 @app.post("/draft", response_model=DraftOut)
-def draft_email(email: EmailIn):
-    # TODO: preprocess, classify, retrieve, generate, guardrails
+def draft_email(email: EmailIn, db: Session = Depends(get_db)):
+    clean_body = preprocess_body(email.body)
+    intent, priority = classify_intent_priority(clean_body)
+    context = build_context(thread_id=email.thread_id, db=db)
+    drafts = generate_drafts(subject=email.subject, body=clean_body, context=context)
+    drafts, confidence = validate_drafts(drafts)
+
+    if not drafts:
+        drafts = [fallback_template(subject=email.subject)]
+
     return DraftOut(
-        variants=[
-            "Thank you for your email, we will respond soon.",
-            "We have received your request, we are verifying.",
-            "Your email has been taken into consideration."
-        ],
-        intent="informational",
-        priority="low",
-        summary=f"Automatic draft for: {email.subject}"
+        variants=drafts,
+        intent=intent,
+        priority=priority,
+        summary=context.get("summary", ""),
+        confidence=confidence,
     )
