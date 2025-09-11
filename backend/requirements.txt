@@ -2,6 +2,13 @@ fastapi
 uvicorn
 psycopg2-binary
 sqlalchemy
+python-dotenv
 chromadb
 langchain
 pydantic
+cryptography
+google-api-python-client
+google-auth
+google-auth-oauthlib
+beautifulsoup4
+pytest
