@@ -24,7 +24,7 @@ Goal: save time in email management by generating ready-to-send drafts with cons
 
 ---
 
-## 📂 Project Structure (initial)
+## 📂 Project Structure
 
 ```
 AI-Agent-Email/
@@ -111,15 +111,5 @@ AI-Agent-Email/
 
    APIs available at: [http://localhost:8000/docs](http://localhost:8000/docs)
 
----
 
-## 📦 Main Dependencies (requirements.txt)
-
-* `fastapi`
-* `uvicorn`
-* `psycopg2-binary` (PostgreSQL driver)
-* `sqlalchemy` (ORM)
-* `chromadb`
-* `langchain`
-* `pydantic`
 
