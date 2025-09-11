@@ -82,14 +82,16 @@ AI-Agent-Email/
 
 ---
 
-## ⚙️ Local Setup (dev)
-1. Clone the repo:
+## ⚙️ Local Setup (Dev)
+
+1. **Clone the repository**
+
    ```bash
    git clone https://github.com/Rickyz03/AI-Agent-Email.git
    cd AI-Agent-Email/backend
    ```
 
-2. Create and activate a virtualenv:
+2. **Create and activate a virtual environment**
 
    ```bash
    python -m venv venv
@@ -97,19 +99,67 @@ AI-Agent-Email/
    venv\Scripts\activate      # Windows
    ```
 
-3. Install dependencies:
+3. **Install dependencies**
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Start the server:
+4. **Configure environment variables**
+
+   Create an `.env` file inside `backend` folder and set your credentials:
+
+   ```env
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=email-agent-user
+   DB_PASSWORD=email-agent-psw
+   DB_NAME=email-agent-db
+
+   OPENAI_API_KEY=your-openai-key
+   SECRET_KEY=your-secret-key
+   ```
+
+   * **PostgreSQL**: Make sure you have a running instance.
+     For local dev you can use Docker:
+
+     ```bash
+     docker run -d --name postgres-db \
+       -e POSTGRES_USER=email-agent-user \
+       -e POSTGRES_PASSWORD=email-agent-psw \
+       -e POSTGRES_DB=email-agent-db \
+       -p 5432:5432 postgres
+     ```
+   * **ChromaDB**: The project uses a local `.chroma` folder. No extra setup is needed, but ensure the process has write access.
+   * **External APIs**:
+
+     * [OpenAI API Key](https://platform.openai.com/) (for embeddings/LLM).
+     * Gmail API credentials if you want to test ingestion via Gmail (see `ingestion/gmail_api.py`).
+
+5. **Initialize the database**
+
+   ```bash
+   python -c "from db import Base, engine; Base.metadata.create_all(bind=engine)"
+   ```
+
+6. **Start the FastAPI backend server**
 
    ```bash
    uvicorn main:app --reload
    ```
 
-   APIs available at: [http://localhost:8000/docs](http://localhost:8000/docs)
+   * The backend runs at: [http://localhost:8000](http://localhost:8000)
+   * Interactive API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+7. **Next steps after server start**
+
+   * Use the **API** (e.g. `/draft` endpoint) to generate automatic replies for emails.
+   * Integrate with the **frontend** (when available) to browse threads, see summaries, and apply actions (accept/edit/send).
+   * Check logs in console for feedback and RAG retrieval details.
+   * Add documents to the knowledge base (`rag/knowledge_base.py`) to improve draft quality.
+
+
+
 
 
 
