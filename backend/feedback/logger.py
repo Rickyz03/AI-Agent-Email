@@ -12,7 +12,7 @@ def log_event(event_type: str, metadata: dict):
         event = Event(
             event_type=event_type,
             ts=datetime.datetime.utcnow(),
-            metadata=metadata
+            event_metadata=metadata
         )
         db.add(event)
         db.commit()

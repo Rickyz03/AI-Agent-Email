@@ -45,4 +45,4 @@ class Event(Base):
     id = Column(Integer, primary_key=True, index=True)
     event_type = Column(String)
     ts = Column(DateTime, default=datetime.datetime.utcnow)
-    metadata = Column(JSON)
+    event_metadata = Column("metadata", JSON)
