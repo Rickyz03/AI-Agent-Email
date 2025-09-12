@@ -7,16 +7,15 @@ client = TestClient(app)
 def test_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert "message" in response.json()
+    assert "AI Agent Email" in response.json()["message"]
 
 
 def test_draft_endpoint():
     payload = {
-        "thread_id": 1,
         "subject": "Test subject",
         "body": "This is a test email body",
-        "from_addr": "user@example.com",
-        "to_addrs": ["agent@example.com"],
+        "from_addr": "sender@example.com",
+        "to_addrs": ["receiver@example.com"]
     }
     response = client.post("/draft", json=payload)
     assert response.status_code == 200

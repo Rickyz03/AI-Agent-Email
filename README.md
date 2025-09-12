@@ -130,17 +130,20 @@ AI-Agent-Email/
    Copy `.env` (example provided in repo) and set your credentials:
 
    ```env
+   # Database
    DB_HOST=localhost
    DB_PORT=5432
    DB_USER=email-agent-user
    DB_PASSWORD=email-agent-psw
    DB_NAME=email-agent-db
 
-   CHROMA_HOST=localhost
-   CHROMA_PORT=8000
-
+   # External APIs
    OPENAI_API_KEY=your-openai-key
 
+   # Chroma
+   CHROMA_URL=http://localhost:8000
+
+   # Security
    SECRET_KEY=your-secret-key
    ```
 
@@ -166,7 +169,15 @@ AI-Agent-Email/
    * The backend runs at: [http://localhost:8001](http://localhost:8001)
    * Interactive API docs: [http://localhost:8001/docs](http://localhost:8001/docs)
 
-8. **Next steps after server start**
+8. **Next steps**
+
+   * Use `/ingest` to fetch emails from Gmail or IMAP into the DB.
+   * Use `/draft` to generate automatic reply drafts.
+   * Use `/kb/index` to add documents to the knowledge base.
+   * Use `/preferences` to set tone/signature.
+   * Use `/feedback` to log user actions.
+
+9. **Next steps after server start**
 
    * Use the **API** (e.g. `/draft` endpoint) to generate automatic replies for emails.
    * Integrate with the **frontend** (when available) to browse threads, see summaries, and apply actions (accept/edit/send).

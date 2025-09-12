@@ -1,9 +1,13 @@
-TEMPLATES = {
-    "default": "Thank you for your email. We will get back to you shortly.",
-    "ask_clarification": "Could you please clarify the details of your request?",
-    "fallback": "We have received your message and will provide a response soon.",
-}
+from typing import List
 
 
-def get_template(name: str) -> str:
-    return TEMPLATES.get(name, TEMPLATES["default"])
+def fallback_templates(subject: str) -> List[str]:
+    """
+    Provide safe fallback email drafts.
+    """
+    base = f"Re: {subject}\n\n"
+    return [
+        base + "Thank you for reaching out. We will reply as soon as possible.",
+        base + "Your email has been received and is being reviewed.",
+        base + "We acknowledge your request and will get back to you shortly.",
+    ]

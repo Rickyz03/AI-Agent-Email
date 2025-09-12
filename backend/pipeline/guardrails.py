@@ -1,23 +1,28 @@
-from typing import List, Tuple
+from typing import List
+from utils.templates import fallback_templates
 
 
-RULES = {
-    "forbidden_words": ["discount", "password", "confidential"],
-}
+FORBIDDEN_WORDS = ["password", "credit card", "ssn"]
 
 
-def validate_drafts(drafts: List[str]) -> Tuple[List[str], float]:
+def validate_drafts(drafts: List[str]) -> List[str]:
     """
-    Validate drafts against rules. Returns (valid_drafts, confidence).
+    Validate generated drafts:
+    - Remove drafts containing forbidden words
+    - Return safe list, or empty if all invalid
     """
-    valid = []
-    for d in drafts:
-        if any(w in d.lower() for w in RULES["forbidden_words"]):
-            continue
-        valid.append(d)
-    confidence = 0.9 if valid else 0.0
-    return valid, confidence
+    safe = []
+    for draft in drafts:
+        if not any(word in draft.lower() for word in FORBIDDEN_WORDS):
+            safe.append(draft)
+    return safe
 
 
-def fallback_template(subject: str) -> str:
-    return f"Re: {subject}\n\nThank you for your message. We will get back to you soon."
+def safe_or_fallback(drafts: List[str], subject: str) -> List[str]:
+    """
+    Return validated drafts, or fallback templates if none are safe.
+    """
+    valid = validate_drafts(drafts)
+    if valid:
+        return valid
+    return fallback_templates(subject)

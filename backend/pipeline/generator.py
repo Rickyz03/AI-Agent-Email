@@ -1,13 +1,20 @@
 from typing import List
 
 
-def generate_drafts(subject: str, body: str, context: dict) -> List[str]:
+def generate_drafts(subject: str, body: str, context: str) -> List[str]:
     """
-    Placeholder generator. Replace with LLM integration.
+    Generate draft replies.
+    TODO: integrate with LLM (OpenAI / Anthropic / local model).
     """
-    drafts = [
-        f"Re: {subject}\n\nThank you for your email. We will review and reply shortly.",
-        f"Re: {subject}\n\nWe have received your request and will provide an update soon.",
-        f"Re: {subject}\n\nYour message has been noted. Expect our response in due course.",
+    base = f"Re: {subject}\n\n"
+
+    variants = [
+        base + "Thank you for your email. We will get back to you shortly.",
+        base + "We acknowledge receipt of your message and are reviewing it.",
+        base + "Your request has been logged and will be handled soon.",
     ]
-    return drafts
+
+    if context:
+        variants = [v + f"\n\n(Context: {context[:200]}...)" for v in variants]
+
+    return variants

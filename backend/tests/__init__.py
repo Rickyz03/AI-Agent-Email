@@ -1,1 +1,3 @@
-# Tests package initialization
+"""
+Tests package: API, pipeline, and DB unit tests.
+"""

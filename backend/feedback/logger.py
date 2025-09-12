@@ -1,16 +1,20 @@
 import datetime
-from sqlalchemy.orm import Session
+from db import SessionLocal
 from models import Event
 
 
-def log_event(db: Session, email_id: int, event_type: str, payload: dict = None):
-    event = Event(
-        email_id=email_id,
-        type=event_type,
-        payload=payload or {},
-        created_at=datetime.datetime.utcnow(),
-    )
-    db.add(event)
-    db.commit()
-    db.refresh(event)
-    return event
+def log_event(event_type: str, metadata: dict):
+    """
+    Save feedback events into DB.
+    """
+    db = SessionLocal()
+    try:
+        event = Event(
+            event_type=event_type,
+            ts=datetime.datetime.utcnow(),
+            metadata=metadata
+        )
+        db.add(event)
+        db.commit()
+    finally:
+        db.close()

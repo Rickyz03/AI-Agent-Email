@@ -1,14 +1,18 @@
 from typing import Tuple
 
 
-def classify_intent_priority(text: str) -> Tuple[str, str]:
+def classify_email(body: str) -> Tuple[str, str]:
     """
-    Very simple heuristic placeholder.
-    Replace with ML/LLM model in production.
+    Very simple heuristic classifier.
+    Returns (intent, priority).
+    TODO: replace with ML/LLM model.
     """
-    text_lower = text.lower()
-    if "urgent" in text_lower or "asap" in text_lower:
+    text = body.lower()
+
+    if "urgent" in text or "asap" in text:
         return "request", "high"
-    if "thank" in text_lower:
-        return "acknowledgment", "low"
-    return "informational", "medium"
+    if "complaint" in text or "problem" in text:
+        return "complaint", "medium"
+    if "unsubscribe" in text or "spam" in text:
+        return "spam", "low"
+    return "informational", "low"

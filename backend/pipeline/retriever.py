@@ -1,29 +1,19 @@
-from sqlalchemy.orm import Session
-from models import Thread, Email
-from rag.vector_store import search_embedding
 from rag.embeddings import embed_text
+from rag.vector_store import search_embedding
 
 
-def build_context(thread_id: int, db: Session):
-    thread = db.query(Thread).filter(Thread.id == thread_id).first()
-    if not thread:
-        return {"summary": "", "emails": []}
+def build_context(body: str, top_k: int = 3) -> str:
+    """
+    Build context for draft generation:
+    - Create embedding of email body
+    - Retrieve similar docs/emails from vector store
+    - Concatenate results as context
+    """
+    query_emb = embed_text(body)
+    results = search_embedding(query_emb, top_k=top_k)
 
-    emails = (
-        db.query(Email)
-        .filter(Email.thread_id == thread_id)
-        .order_by(Email.ts.asc())
-        .all()
-    )
+    contexts = []
+    for doc in results.get("documents", [[]])[0]:
+        contexts.append(doc)
 
-    summary = f"Thread: {thread.subject} ({len(emails)} messages)"
-    body_concat = " ".join([e.body_text for e in emails if e.body_text])
-
-    query_emb = embed_text(body_concat)
-    kb_results = search_embedding(query_emb, top_k=3)
-
-    return {
-        "summary": summary,
-        "emails": [e.body_text for e in emails],
-        "kb_chunks": kb_results,
-    }
+    return "\n\n".join(contexts)

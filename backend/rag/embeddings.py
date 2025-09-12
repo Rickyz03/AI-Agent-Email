@@ -1,8 +1,9 @@
 from typing import List
 from langchain_openai import OpenAIEmbeddings
+from utils.settings import settings
 
-# Initialize embedding model (replace with alternative if needed)
-embedder = OpenAIEmbeddings()
+# Initialize embedding model
+embedder = OpenAIEmbeddings(openai_api_key=settings.OPENAI_API_KEY)
 
 
 def embed_text(text: str) -> List[float]:

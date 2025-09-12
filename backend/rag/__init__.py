@@ -1,1 +1,3 @@
-# RAG package initialization
+"""
+RAG package: embeddings, vector store, knowledge base.
+"""

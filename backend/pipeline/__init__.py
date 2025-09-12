@@ -1,1 +1,3 @@
-# Pipeline package initialization
+"""
+Pipeline package: preprocessing, classification, retrieval, generation, guardrails.
+"""

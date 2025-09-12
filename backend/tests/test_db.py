@@ -1,27 +1,44 @@
-from db import Base, engine, SessionLocal
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from db import Base
 from models import Thread, Email
 
 
-def test_db_connection():
+@pytest.fixture(scope="function")
+def test_db():
+    """
+    Use SQLite in-memory DB for fast, isolated testing.
+    """
+    engine = create_engine("sqlite:///:memory:")
+    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     Base.metadata.create_all(bind=engine)
-    db = SessionLocal()
+
+    db = TestingSessionLocal()
     try:
-        thread = Thread(subject="Test Thread")
-        db.add(thread)
-        db.commit()
-        db.refresh(thread)
-
-        email = Email(
-            thread_id=thread.id,
-            from_addr="test@example.com",
-            to_addrs=["dest@example.com"],
-            body_text="Test body",
-        )
-        db.add(email)
-        db.commit()
-        db.refresh(email)
-
-        assert email.thread_id == thread.id
-        assert email.body_text == "Test body"
+        yield db
     finally:
         db.close()
+
+
+def test_insert_thread_and_email(test_db):
+    thread = Thread(subject="Test thread")
+    test_db.add(thread)
+    test_db.flush()
+
+    email = Email(
+        thread_id=thread.id,
+        from_addr="sender@example.com",
+        to_addrs=["receiver@example.com"],
+        body_text="Hello test",
+        language="en"
+    )
+    test_db.add(email)
+    test_db.commit()
+
+    saved_thread = test_db.query(Thread).first()
+    saved_email = test_db.query(Email).first()
+
+    assert saved_thread.subject == "Test thread"
+    assert saved_email.from_addr == "sender@example.com"
+    assert saved_email.thread_id == saved_thread.id
