@@ -1,53 +1,69 @@
 import imaplib
 import email
 from email.header import decode_header
-from typing import List, Dict
+from typing import List
+
+
+class ParsedEmail:
+    def __init__(self, subject, from_addr, to_addrs, body, language="it"):
+        self.subject = subject
+        self.from_addr = from_addr
+        self.to_addrs = to_addrs
+        self.body = body
+        self.language = language
 
 
 class IMAPClient:
-    def __init__(self, host: str, username: str, password: str, ssl: bool = True):
+    def __init__(self, host: str = "imap.gmail.com", username: str = None, password: str = None):
         self.host = host
         self.username = username
         self.password = password
-        self.ssl = ssl
-        self.conn = None
 
-    def connect(self):
-        if self.ssl:
-            self.conn = imaplib.IMAP4_SSL(self.host)
-        else:
-            self.conn = imaplib.IMAP4(self.host)
-        self.conn.login(self.username, self.password)
+    def fetch_unseen(self) -> List[ParsedEmail]:
+        """
+        Connect to IMAP server and fetch unseen emails.
+        Returns a list of ParsedEmail objects.
+        """
+        if not self.username or not self.password:
+            return []
 
-    def fetch_unseen(self, mailbox: str = "INBOX") -> List[Dict]:
-        self.conn.select(mailbox)
-        status, messages = self.conn.search(None, "UNSEEN")
-        email_ids = messages[0].split()
+        conn = imaplib.IMAP4_SSL(self.host)
+        conn.login(self.username, self.password)
+        conn.select("inbox")
 
-        results = []
-        for eid in email_ids:
-            status, msg_data = self.conn.fetch(eid, "(RFC822)")
-            if status != "OK":
-                continue
-            msg = email.message_from_bytes(msg_data[0][1])
-            subject, encoding = decode_header(msg["Subject"])[0]
+        status, messages = conn.search(None, "UNSEEN")
+        parsed_emails = []
+
+        for num in messages[0].split():
+            _, data = conn.fetch(num, "(RFC822)")
+            raw_email = data[0][1]
+            msg = email.message_from_bytes(raw_email)
+
+            subject, _ = decode_header(msg["Subject"])[0]
             if isinstance(subject, bytes):
-                subject = subject.decode(encoding or "utf-8")
-            results.append({
-                "id": eid.decode(),
-                "from": msg.get("From"),
-                "to": msg.get("To"),
-                "subject": subject,
-                "body": self._get_body(msg)
-            })
-        return results
+                subject = subject.decode()
 
-    def _get_body(self, msg):
-        if msg.is_multipart():
-            for part in msg.walk():
-                ctype = part.get_content_type()
-                if ctype == "text/plain":
-                    return part.get_payload(decode=True).decode()
-        else:
-            return msg.get_payload(decode=True).decode()
-        return ""
+            from_addr = msg.get("From")
+            to_addrs = msg.get_all("To", [])
+
+            body = ""
+            if msg.is_multipart():
+                for part in msg.walk():
+                    if part.get_content_type() == "text/plain":
+                        body = part.get_payload(decode=True).decode(errors="ignore")
+                        break
+            else:
+                body = msg.get_payload(decode=True).decode(errors="ignore")
+
+            parsed_emails.append(
+                ParsedEmail(
+                    subject=subject,
+                    from_addr=from_addr,
+                    to_addrs=to_addrs,
+                    body=body,
+                )
+            )
+
+        conn.close()
+        conn.logout()
+        return parsed_emails
