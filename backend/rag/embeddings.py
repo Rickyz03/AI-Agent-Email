@@ -1,5 +1,5 @@
 from typing import List
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 
 # Initialize embedding model (replace with alternative if needed)
 embedder = OpenAIEmbeddings()

@@ -5,6 +5,8 @@ sqlalchemy
 python-dotenv
 chromadb
 langchain
+langchain-community
+langchain-openai
 pydantic
 cryptography
 google-api-python-client
