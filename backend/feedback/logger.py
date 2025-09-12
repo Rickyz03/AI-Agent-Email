@@ -11,7 +11,7 @@ def log_event(event_type: str, metadata: dict):
     try:
         event = Event(
             event_type=event_type,
-            ts=datetime.datetime.utcnow(),
+            ts=datetime.datetime.now(datetime.timezone.utc),
             event_metadata=metadata
         )
         db.add(event)
