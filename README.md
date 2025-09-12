@@ -169,7 +169,7 @@ AI-Agent-Email/
    * The backend runs at: [http://localhost:8001](http://localhost:8001)
    * Interactive API docs: [http://localhost:8001/docs](http://localhost:8001/docs)
 
-8. **Next steps**
+8. **Endpoints**
 
    * Use `/ingest` to fetch emails from Gmail or IMAP into the DB.
    * Use `/draft` to generate automatic reply drafts.
