@@ -160,11 +160,11 @@ AI-Agent-Email/
 7. **Start the FastAPI backend server**
 
    ```bash
-   uvicorn main:app --reload
+   uvicorn main:app --reload --port 8001
    ```
 
-   * The backend runs at: [http://localhost:8000](http://localhost:8000)
-   * Interactive API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+   * The backend runs at: [http://localhost:8001](http://localhost:8001)
+   * Interactive API docs: [http://localhost:8001/docs](http://localhost:8001/docs)
 
 8. **Next steps after server start**
 
