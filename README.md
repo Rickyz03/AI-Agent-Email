@@ -135,6 +135,14 @@ AI-Agent-Email/
 
      * [OpenAI API Key](https://platform.openai.com/) (for embeddings/LLM).
      * Gmail API credentials if you want to test ingestion via Gmail (see `ingestion/gmail_api.py`).
+   * **SECRET\_KEY**: Used to encrypt/decrypt sensitive data (e.g., OAuth tokens).
+
+     * Must be random, long, and secret.
+     * To generate one locally:
+
+       ```bash
+       python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+       ```
 
 5. **Initialize the database**
 
