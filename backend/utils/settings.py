@@ -15,5 +15,9 @@ class Settings:
     GMAIL_CLIENT_SECRET: str = os.getenv("GMAIL_CLIENT_SECRET", "")
     GMAIL_CLIENT_ID: str = os.getenv("GMAIL_CLIENT_ID", "")
 
+    # Chroma settings
+    CHROMA_HOST: str = os.getenv("CHROMA_HOST", "localhost")
+    CHROMA_PORT: int = int(os.getenv("CHROMA_PORT", "8000"))
+
 
 settings = Settings()

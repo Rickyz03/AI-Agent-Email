@@ -1,8 +1,8 @@
-from chromadb import Client
-from chromadb.config import Settings
+from chromadb import HttpClient
+from utils.settings import settings
 
-# Initialize Chroma client
-client = Client(Settings(persist_directory=".chroma"))
+# Connect to Chroma server running in Docker
+client = HttpClient(host=settings.CHROMA_HOST, port=settings.CHROMA_PORT)
 
 # Create or load collection
 collection = client.get_or_create_collection("emails")
