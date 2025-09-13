@@ -62,6 +62,7 @@ AI-Agent-Email/
 │   │  
 │   ├── utils/  
 │   │   ├── __init__.py  
+│   │   ├── llm_helpers.py     # Helper functions to manage LLM outputs
 │   │   ├── settings.py        # Configurations (dotenv/env vars)
 │   │   ├── security.py        # Encryption, secrets management, privacy policies
 │   │   └── templates.py       # Standard email templates and fallbacks
