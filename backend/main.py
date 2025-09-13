@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Optional, Any
+from langchain_openai import ChatOpenAI
 
 from db import SessionLocal, Base, engine
 from models import Email, Thread, Preference
@@ -19,6 +20,7 @@ from feedback.logger import log_event
 from feedback.updater import update_preferences
 from utils.templates import fallback_templates
 from utils.security import encrypt_data, decrypt_data
+from utils.settings import settings
 
 # Create tables on startup (dev only; use Alembic in production)
 Base.metadata.create_all(bind=engine)
@@ -168,6 +170,14 @@ def draft_email(email_in: EmailIn, db: Session = Depends(get_db)):
     Generate AI-assisted drafts for a given email.
     This route now also persists the incoming email (addresses encrypted).
     """
+
+    # --- inizializza LLM condiviso per questa request (creato una volta per request) ---
+    llm = ChatOpenAI(
+        openai_api_key=settings.OPENAI_API_KEY,
+        model_name=settings.OPENAI_MODEL_NAME,
+    )
+    # -------------------------------------------------------------------------------
+
     # Persist incoming email (encrypt sensitive fields)
     # If thread_id provided and exists, use it; otherwise create a new thread.
     thread_id = email_in.thread_id
@@ -202,13 +212,13 @@ def draft_email(email_in: EmailIn, db: Session = Depends(get_db)):
     clean_body = preprocess_text(email_in.body)
 
     # 2. Classify
-    intent, priority = classify_email(clean_body)
+    intent, priority = classify_email(clean_body, llm)
 
     # 3. Retrieve context
     context = build_context(clean_body)
 
     # 4. Generate drafts
-    drafts = generate_drafts(subject=email_in.subject, body=clean_body, context=context)
+    drafts = generate_drafts(subject=email_in.subject, body=clean_body, context=context, llm=llm)
 
     # 5. Guardrails & fallback
     valid_drafts = validate_drafts(drafts)
