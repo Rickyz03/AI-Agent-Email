@@ -19,8 +19,10 @@ from rag.knowledge_base import index_documents
 from feedback.logger import log_event
 from feedback.updater import update_preferences
 from utils.templates import fallback_templates
-from utils.security import encrypt_data, decrypt_data
 from utils.settings import settings
+from utils.main_helpers import (
+    _ensure_list_of_str, _encrypt_addr_list, _decrypt_addr_list, _decrypt_single
+)
 
 # Create tables on startup (dev only; use Alembic in production)
 Base.metadata.create_all(bind=engine)
@@ -37,64 +39,14 @@ def get_db():
         db.close()
 
 
-# ----------------------
-# Helper utilities
-# ----------------------
-def _ensure_list_of_str(maybe_list: Optional[Any]) -> List[str]:
-    """
-    Normalize possible values into a list of strings.
-    Accepts: None, list[str], comma-separated string.
-    """
-    if not maybe_list:
-        return []
-    if isinstance(maybe_list, list):
-        return [str(x) for x in maybe_list]
-    if isinstance(maybe_list, str):
-        # split by comma if present
-        parts = [p.strip() for p in maybe_list.split(",") if p.strip()]
-        return parts
-    # fallback
-    return [str(maybe_list)]
 
 
-def _encrypt_addr_list(addrs: Optional[Any]) -> Optional[List[str]]:
-    """
-    Return list of encrypted addresses or None if empty.
-    """
-    lst = _ensure_list_of_str(addrs)
-    if not lst:
-        return None
-    return [encrypt_data(a) for a in lst]
+# ----------------------------------
+# ----------- ENDPOINTS ------------
+# ----------------------------------
 
 
-def _decrypt_addr_list(enc_list: Optional[List[str]]) -> List[str]:
-    """
-    Try to decrypt each element; if decryption fails, return original element.
-    """
-    if not enc_list:
-        return []
-    out = []
-    for v in enc_list:
-        try:
-            out.append(decrypt_data(v))
-        except Exception:
-            # if it's not encrypted or decryption fails, return original
-            out.append(v)
-    return out
-
-
-def _decrypt_single(value: Optional[str]) -> Optional[str]:
-    if value is None:
-        return None
-    try:
-        return decrypt_data(value)
-    except Exception:
-        return value
-
-
-# ----------------------
-# Root
-# ----------------------
+# ========== HEALTH CHECK ==========
 @app.get("/")
 def root():
     return {"message": "AI Agent Email is running 🚀"}
