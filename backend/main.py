@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional, Any
 
 from db import SessionLocal, Base, engine
 from models import Email, Thread, Preference
@@ -35,17 +35,75 @@ def get_db():
         db.close()
 
 
+# ----------------------
+# Helper utilities
+# ----------------------
+def _ensure_list_of_str(maybe_list: Optional[Any]) -> List[str]:
+    """
+    Normalize possible values into a list of strings.
+    Accepts: None, list[str], comma-separated string.
+    """
+    if not maybe_list:
+        return []
+    if isinstance(maybe_list, list):
+        return [str(x) for x in maybe_list]
+    if isinstance(maybe_list, str):
+        # split by comma if present
+        parts = [p.strip() for p in maybe_list.split(",") if p.strip()]
+        return parts
+    # fallback
+    return [str(maybe_list)]
+
+
+def _encrypt_addr_list(addrs: Optional[Any]) -> Optional[List[str]]:
+    """
+    Return list of encrypted addresses or None if empty.
+    """
+    lst = _ensure_list_of_str(addrs)
+    if not lst:
+        return None
+    return [encrypt_data(a) for a in lst]
+
+
+def _decrypt_addr_list(enc_list: Optional[List[str]]) -> List[str]:
+    """
+    Try to decrypt each element; if decryption fails, return original element.
+    """
+    if not enc_list:
+        return []
+    out = []
+    for v in enc_list:
+        try:
+            out.append(decrypt_data(v))
+        except Exception:
+            # if it's not encrypted or decryption fails, return original
+            out.append(v)
+    return out
+
+
+def _decrypt_single(value: Optional[str]) -> Optional[str]:
+    if value is None:
+        return None
+    try:
+        return decrypt_data(value)
+    except Exception:
+        return value
+
+
+# ----------------------
+# Root
+# ----------------------
 @app.get("/")
 def root():
     return {"message": "AI Agent Email is running 🚀"}
 
 
 # ========== INGESTION ==========
-
 @app.post("/ingest", response_model=List[EmailOut])
 def ingest_emails(provider: str, db: Session = Depends(get_db)):
     """
     Fetch unread emails from IMAP/Gmail and save them into DB.
+    Returns the saved emails (with decrypted addresses for output).
     """
     if provider == "imap":
         client = IMAPClient()
@@ -58,31 +116,88 @@ def ingest_emails(provider: str, db: Session = Depends(get_db)):
 
     saved_emails = []
     for msg in messages:
+        # create or reuse thread (simple approach: always create new thread for now)
         thread = Thread(subject=msg.subject)
         db.add(thread)
-        db.flush()  # get thread.id
+        db.flush()  # assign thread.id
 
-        email = Email(
+        # normalize to_addrs into list
+        to_addrs_list = _ensure_list_of_str(msg.to_addrs)
+
+        email_obj = Email(
             thread_id=thread.id,
-            from_addr=msg.from_addr,
-            to_addrs=msg.to_addrs,
+            from_addr=encrypt_data(msg.from_addr) if msg.from_addr else None,
+            to_addrs=_encrypt_addr_list(to_addrs_list),
             body_text=msg.body,
-            language=msg.language,
+            language=getattr(msg, "language", "it"),
         )
-        db.add(email)
-        saved_emails.append(email)
+        db.add(email_obj)
+        db.flush()
+        # collect for output (decrypt addresses)
+        db.refresh(email_obj)
+        saved_emails.append(email_obj)
 
     db.commit()
-    return saved_emails
+
+    # prepare decrypted output list matching EmailOut schema
+    output_list = []
+    for e in saved_emails:
+        output_list.append({
+            "id": e.id,
+            "thread_id": e.thread_id,
+            "subject": e.thread.subject if getattr(e, "thread", None) else None,
+            "body_text": e.body_text,
+            "from_addr": _decrypt_single(e.from_addr),
+            "to_addrs": _decrypt_addr_list(e.to_addrs),
+            "cc_addrs": _decrypt_addr_list(e.cc_addrs) if getattr(e, "cc_addrs", None) else [],
+            "bcc_addrs": _decrypt_addr_list(e.bcc_addrs) if getattr(e, "bcc_addrs", None) else [],
+            "ts": e.ts,
+            "language": e.language,
+            "intent": e.intent,
+            "priority": e.priority,
+            "attachments": e.attachments,
+        })
+
+    return output_list
 
 
 # ========== DRAFT GENERATION ==========
-
 @app.post("/draft", response_model=DraftOut)
 def draft_email(email_in: EmailIn, db: Session = Depends(get_db)):
     """
     Generate AI-assisted drafts for a given email.
+    This route now also persists the incoming email (addresses encrypted).
     """
+    # Persist incoming email (encrypt sensitive fields)
+    # If thread_id provided and exists, use it; otherwise create a new thread.
+    thread_id = email_in.thread_id
+    if thread_id:
+        thread = db.query(Thread).filter(Thread.id == thread_id).first()
+        if not thread:
+            # create thread placeholder if referenced thread doesn't exist
+            thread = Thread(subject=email_in.subject)
+            db.add(thread)
+            db.flush()
+        thread_id = thread.id
+    else:
+        thread = Thread(subject=email_in.subject)
+        db.add(thread)
+        db.flush()
+        thread_id = thread.id
+
+    db_email = Email(
+        thread_id=thread_id,
+        from_addr=encrypt_data(email_in.from_addr) if email_in.from_addr else None,
+        to_addrs=_encrypt_addr_list(email_in.to_addrs),
+        cc_addrs=_encrypt_addr_list(email_in.cc_addrs) if email_in.cc_addrs else None,
+        bcc_addrs=_encrypt_addr_list(email_in.bcc_addrs) if email_in.bcc_addrs else None,
+        body_text=email_in.body,
+        language=getattr(email_in, "language", "it"),
+    )
+    db.add(db_email)
+    db.commit()
+    db.refresh(db_email)
+
     # 1. Preprocess
     clean_body = preprocess_text(email_in.body)
 
@@ -100,8 +215,8 @@ def draft_email(email_in: EmailIn, db: Session = Depends(get_db)):
     if not valid_drafts:
         valid_drafts = fallback_templates(email_in.subject)
 
-    # 6. Log feedback placeholder
-    log_event(event_type="draft_generated", metadata={"intent": intent, "priority": priority})
+    # 6. Log feedback placeholder (include email id)
+    log_event(event_type="draft_generated", metadata={"email_id": db_email.id, "intent": intent, "priority": priority})
 
     return DraftOut(
         variants=valid_drafts,
@@ -112,7 +227,6 @@ def draft_email(email_in: EmailIn, db: Session = Depends(get_db)):
 
 
 # ========== KNOWLEDGE BASE ==========
-
 @app.post("/kb/index")
 def kb_index(data: KBIndexIn):
     """
@@ -123,7 +237,6 @@ def kb_index(data: KBIndexIn):
 
 
 # ========== PREFERENCES ==========
-
 @app.post("/preferences", response_model=PreferenceOut)
 def set_preferences(pref: PreferenceIn, db: Session = Depends(get_db)):
     """
@@ -146,7 +259,6 @@ def get_preferences(db: Session = Depends(get_db)):
 
 
 # ========== FEEDBACK ==========
-
 @app.post("/feedback")
 def feedback(event_type: str, metadata: dict):
     """
