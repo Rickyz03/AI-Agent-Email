@@ -47,7 +47,7 @@ Invoke-RestMethod -Uri "$host/draft" -Method POST -ContentType "application/json
 Invoke-RestMethod -Uri "$backendHost/kb/index" -Method POST -ContentType "application/json" -Body '{
   "documents": [
     {"id": "doc1", "title": "Policy Resi", "text": "Resi possibili entro 30 giorni con scontrino."},
-    {"id": "doc2", "title": "Listino prezzi", "text": "Prezzo base prodotto X = 100€."}
+    {"id": "doc2", "title": "Listino prezzi", "text": "Prezzo base prodotto X = 100 euro."}
   ]
 }'
 
@@ -84,3 +84,7 @@ Invoke-RestMethod -Uri "$host/feedback" -Method POST -ContentType "application/j
   "event_type": "draft_edited",
   "metadata": {"email_id": 3, "diff": "aggiunto saluto finale"}
 }'
+
+
+# Fine
+Write-Host "Test completati."
