@@ -23,11 +23,6 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str = "changeme"
 
-    # Defaults for LLM prompting
-    DEFAULT_TONE: str = "neutrale"
-    DEFAULT_LANGUAGE: str = "it"
-    DEFAULT_SIGNATURE: str = "Cordiali saluti,\nIl tuo assistente AI"
-
     class Config:
         env_file = ".env"
 
