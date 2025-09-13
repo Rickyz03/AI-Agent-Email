@@ -84,7 +84,3 @@ Invoke-RestMethod -Uri "$host/feedback" -Method POST -ContentType "application/j
   "event_type": "draft_edited",
   "metadata": {"email_id": 3, "diff": "aggiunto saluto finale"}
 }'
-
-
-# Fine
-Write-Host "Test completati."
