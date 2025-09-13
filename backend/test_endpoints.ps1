@@ -33,7 +33,7 @@ Invoke-RestMethod -Uri "$backendHost/draft" -Method POST -ContentType "applicati
 }'
 
 # Bozza con nuovo thread (senza thread_id)
-Invoke-RestMethod -Uri "$host/draft" -Method POST -ContentType "application/json" -Body '{
+Invoke-RestMethod -Uri "$backendHost/draft" -Method POST -ContentType "application/json" -Body '{
   "subject": "Domanda sui prezzi",
   "body": "Potete confermarmi il prezzo aggiornato?",
   "from_addr": "cliente2@example.com",
@@ -74,13 +74,13 @@ Invoke-RestMethod -Uri "$backendHost/feedback" -Method POST -ContentType "applic
 }'
 
 # Log feedback: bozza rifiutata
-Invoke-RestMethod -Uri "$host/feedback" -Method POST -ContentType "application/json" -Body '{
+Invoke-RestMethod -Uri "$backendHost/feedback" -Method POST -ContentType "application/json" -Body '{
   "event_type": "draft_rejected",
   "metadata": {"email_id": 2, "reason": "non rilevante"}
 }'
 
 # Log feedback: bozza modificata
-Invoke-RestMethod -Uri "$host/feedback" -Method POST -ContentType "application/json" -Body '{
+Invoke-RestMethod -Uri "$backendHost/feedback" -Method POST -ContentType "application/json" -Body '{
   "event_type": "draft_edited",
   "metadata": {"email_id": 3, "diff": "aggiunto saluto finale"}
 }'
