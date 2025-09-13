@@ -74,7 +74,9 @@ AI-Agent-Email/
 │   │   └── test_db.py         # Model and DB tests
 │   │
 │   ├── .env                   # Environment variables configuration
-│   └── requirements.txt       # Python project dependencies
+│   ├── requirements.txt       # Python project dependencies
+│   ├── test_endpoints.ps1     # PowerShell script for testing API endpoints
+│   └── test_endpoints.sh      # Bash script for testing API endpoints
 │
 ├── README.md                  # Main project documentation
 ├── .gitignore                 # Files and folders to exclude from version control
