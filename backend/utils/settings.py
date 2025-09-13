@@ -1,4 +1,8 @@
+import os
 from pydantic_settings import BaseSettings
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class Settings(BaseSettings):
@@ -9,14 +13,20 @@ class Settings(BaseSettings):
     DB_PASSWORD: str = "email-agent-psw"
     DB_NAME: str = "email-agent-db"
 
-    # External APIs
+    # OpenAI
     OPENAI_API_KEY: str = "changeme"
+    OPENAI_MODEL_NAME: str = "gpt-4o-mini"
 
     # Chroma
     CHROMA_URL: str = "http://localhost:8000"
 
     # Security
     SECRET_KEY: str = "changeme"
+
+    # Defaults for LLM prompting
+    DEFAULT_TONE: str = "neutrale"
+    DEFAULT_LANGUAGE: str = "it"
+    DEFAULT_SIGNATURE: str = "Cordiali saluti,\nIl tuo assistente AI"
 
     class Config:
         env_file = ".env"
