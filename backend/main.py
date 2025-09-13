@@ -46,7 +46,7 @@ def get_db():
 # ----------------------------------
 
 
-# ========== HEALTH CHECK ==========
+# ============ ROOT =============
 @app.get("/")
 def root():
     return {"message": "AI Agent Email is running 🚀"}
