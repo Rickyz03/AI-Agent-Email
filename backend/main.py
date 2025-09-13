@@ -192,10 +192,21 @@ def draft_email(email_in: EmailIn, db: Session = Depends(get_db)):
 @app.post("/kb/index")
 def kb_index(data: KBIndexIn):
     """
-    Index documents into the Knowledge Base.
+    Index structured documents into the Knowledge Base.
+    Each document can have id, title, text, and optional source.
     """
-    index_documents(data.documents)
-    return {"status": "indexed", "count": len(data.documents)}
+    # Extract only the necessary fields for indexing
+    docs = [
+        {
+            "id": doc.id,
+            "title": doc.title,
+            "text": doc.text,
+            "source": doc.source,
+        }
+        for doc in data.documents
+    ]
+    index_documents(docs)
+    return {"status": "indexed", "count": len(docs)}
 
 
 # ========== PREFERENCES ==========

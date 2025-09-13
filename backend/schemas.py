@@ -64,5 +64,11 @@ class PreferenceOut(BaseModel):
 
 # ========== KNOWLEDGE BASE ==========
 
+class DocumentIn(BaseModel):
+    id: Optional[str] = None
+    title: Optional[str] = None
+    text: str
+    source: Optional[str] = None
+
 class KBIndexIn(BaseModel):
-    documents: List[str] = Field(..., description="List of raw documents to index in KB")
+    documents: List[DocumentIn]
