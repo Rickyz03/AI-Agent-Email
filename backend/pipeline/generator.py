@@ -12,8 +12,6 @@ def generate_drafts(subject: str, body: str, context: str) -> List[str]:
     llm = ChatOpenAI(
         openai_api_key=settings.OPENAI_API_KEY,
         model_name=settings.OPENAI_MODEL_NAME,
-        temperature=0.7,
-        max_tokens=800,
     )
 
     system_prompt = (
