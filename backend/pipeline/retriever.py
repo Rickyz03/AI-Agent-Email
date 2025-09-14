@@ -13,7 +13,15 @@ def build_context(body: str, top_k: int = 3) -> str:
     results = search_embedding(query_emb, top_k=top_k)
 
     contexts = []
+    # Extract documents from the result
     for doc in results.get("documents", [[]])[0]:
-        contexts.append(doc)
+        # Skip None or empty documents
+        if doc is None or str(doc).strip() == "":
+            continue
+        contexts.append(str(doc))
+
+    # If there are no valid documents, return an empty string
+    if not contexts:
+        return ""
 
     return "\n\n".join(contexts)
