@@ -18,7 +18,9 @@ class Settings(BaseSettings):
     OPENAI_MODEL_NAME: str = "gpt-4o-mini"
 
     # Chroma
-    CHROMA_URL: str = "http://localhost:8000"
+    CHROMA_HOST: str = "localhost"
+    CHROMA_PORT: int = 8000
+    CHROMA_COLLECTION: str = "emails"
 
     # Security
     SECRET_KEY: str = "changeme"

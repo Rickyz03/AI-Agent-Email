@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List, Optional, Any
+from typing import List
 from langchain_openai import ChatOpenAI
 
 from db import SessionLocal, Base, engine
@@ -20,6 +20,7 @@ from feedback.logger import log_event
 from feedback.updater import update_preferences
 from utils.templates import fallback_templates
 from utils.settings import settings
+from utils.security import encrypt_data
 from utils.main_helpers import (
     _ensure_list_of_str, _encrypt_addr_list, _decrypt_addr_list, _decrypt_single
 )
