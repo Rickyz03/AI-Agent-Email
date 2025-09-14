@@ -1,23 +1,38 @@
 import chromadb
 from utils.settings import settings
 
-
-# Inizializza il client Chroma
+# Initialize the Chroma client
 chroma_client = chromadb.HttpClient(
     host=settings.CHROMA_HOST,
     port=settings.CHROMA_PORT,
 )
 
-# Ottieni o crea la collezione
+# Get or create the collection
 collection = chroma_client.get_or_create_collection(
     name=settings.CHROMA_COLLECTION
 )
 
 
+def sanitize_metadata(metadata: dict) -> dict:
+    """
+    Normalize metadata so that every value is a primitive JSON-serializable type.
+    Non-primitive values are converted to their string representation.
+    """
+    safe = {}
+    for k, v in metadata.items():
+        if isinstance(v, (str, int, float, bool)) or v is None:
+            safe[k] = v
+        else:
+            safe[k] = str(v)  # fallback: serialize to string
+    return safe
+
+
 def add_embedding(id: str, embedding: list[float], metadata: dict):
     """
-    Aggiunge un embedding a Chroma.
+    Add an embedding to Chroma.
     """
+    metadata = sanitize_metadata(metadata)
+
     collection.add(
         ids=[id],
         embeddings=[embedding],
@@ -28,7 +43,7 @@ def add_embedding(id: str, embedding: list[float], metadata: dict):
 
 def search_embedding(query_emb: list[float], top_k: int = 5):
     """
-    Cerca embeddings simili in Chroma.
+    Search for similar embeddings in Chroma.
     """
     results = collection.query(
         query_embeddings=[query_emb],
