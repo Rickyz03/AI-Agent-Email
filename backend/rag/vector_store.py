@@ -1,4 +1,5 @@
 import chromadb
+import json
 from utils.settings import settings
 
 # Initialize the Chroma client
@@ -15,15 +16,19 @@ collection = chroma_client.get_or_create_collection(
 
 def sanitize_metadata(metadata: dict) -> dict:
     """
-    Normalize metadata so that every value is a primitive JSON-serializable type.
-    Non-primitive values are converted to their string representation.
+    Normalize the metadata so that each value is compatible with Chroma.
+    - If it is a primitive type (str, int, float, bool, None): leave it unchanged
+    - If it is a dict or a list: convert it to a JSON string
+    - Otherwise: convert it to a simple string
     """
     safe = {}
     for k, v in metadata.items():
         if isinstance(v, (str, int, float, bool)) or v is None:
             safe[k] = v
+        elif isinstance(v, (dict, list)):
+            safe[k] = json.dumps(v, ensure_ascii=False)  # JSON valido
         else:
-            safe[k] = str(v)  # fallback: serialize to string
+            safe[k] = str(v)
     return safe
 
 

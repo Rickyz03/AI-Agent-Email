@@ -46,8 +46,8 @@ Invoke-RestMethod -Uri "$backendHost/draft" -Method POST -ContentType "applicati
 # Indicizzare documenti multipli
 Invoke-RestMethod -Uri "$backendHost/kb/index" -Method POST -ContentType "application/json" -Body '{
   "documents": [
-    {"id": "doc1", "title": "Policy Resi", "text": "Resi possibili entro 30 giorni con scontrino."},
-    {"id": "doc2", "title": "Listino prezzi", "text": "Prezzo base prodotto X = 100 euro."}
+    {"id": "doc1", "title": "Policy Resi", "text": "Resi possibili entro 30 giorni con scontrino.", "source": "documento interno"},
+    {"id": "doc2", "title": "Listino prezzi", "text": "Prezzo base prodotto X = 100 euro.", "source": "documento interno"}
   ]
 }'
 
