@@ -140,11 +140,14 @@ AI-Agent-Email/
    DB_PASSWORD=email-agent-psw
    DB_NAME=email-agent-db
 
-   # External APIs
+   # OpenAI
    OPENAI_API_KEY=your-openai-key
+   OPENAI_MODEL_NAME=gpt-4o-mini
 
    # Chroma
-   CHROMA_URL=http://localhost:8000
+   CHROMA_HOST=localhost
+   CHROMA_PORT=8000
+   CHROMA_COLLECTION=emails
 
    # Security
    SECRET_KEY=your-secret-key
