@@ -152,6 +152,12 @@ AI-Agent-Email/
    CHROMA_PORT=8000
    CHROMA_COLLECTION=emails
 
+   # IMAP
+   IMAP_HOST=imap.libero.it
+   IMAP_PORT=993
+   IMAP_USERNAME=your-email@libero.it
+   IMAP_PASSWORD=your-password
+
    # Security
    SECRET_KEY=your-secret-key
    ```
