@@ -39,7 +39,10 @@ AI-Agent-Email/
 │   │   ├── __init__.py  
 │   │   ├── imap_client.py     # IMAP connection, email polling
 │   │   ├── gmail_api.py       # Gmail API integration (OAuth2)
-│   │   └── parser.py          # Email parsing, attachments, HTML → text cleaning
+│   │   ├── parser.py          # Email parsing, attachments, HTML → text cleaning
+│   │   ├── init_gmail.py      # Initializes Gmail API connection and generates authentication token
+│   │   ├── credentials.json   # Contains OAuth2 client credentials for Gmail API access
+│   │   └── token.json         # Stores generated authentication token for Gmail API requests
 │   │  
 │   ├── pipeline/  
 │   │   ├── __init__.py  
@@ -224,9 +227,8 @@ AI-Agent-Email/
 
 10. **Next steps after server start**
 
-    * Use the **API** (e.g. `/draft` endpoint) to generate automatic replies for emails.
-    * Integrate with the **frontend** (when available) to browse threads, see summaries, and apply actions (accept/edit/send).
-    * Check logs in console for feedback and RAG retrieval details.
-    * Add documents to the knowledge base (`rag/knowledge_base.py`) to improve draft quality.
-
+   * Use the **API** (e.g. `/draft` endpoint) to generate automatic replies for emails.
+   * Integrate with the **frontend** (when available) to browse threads, see summaries, and apply actions (accept/edit/send).
+   * Check logs in console for feedback and RAG retrieval details.
+   * Add documents to the knowledge base (`rag/knowledge_base.py`) to improve draft quality.
 
