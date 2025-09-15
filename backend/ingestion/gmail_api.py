@@ -15,10 +15,10 @@ class ParsedEmail:
 
 
 class GmailAPI:
-    def __init__(self, token_path: str = "token.json", creds_path: str = "credentials.json"):
+    def __init__(self, token_path: str = "ingestion/token.json", creds_path: str = "ingestion/credentials.json"):
         """
         Initialize Gmail API client.
-        Requires credentials.json (OAuth2 client secrets) and token.json (user access token).
+        Requires credentials.json (OAuth2 client secrets) and token.json (user access token) under ingestion/.
         """
         self.creds = Credentials.from_authorized_user_file(token_path)
 
