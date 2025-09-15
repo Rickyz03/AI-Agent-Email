@@ -160,13 +160,52 @@ AI-Agent-Email/
      python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
      ```
 
-6. **Initialize the database**
+6. **Prepare Gmail API credentials**
+
+   To allow Gmail ingestion, you need two local files:  
+   - `credentials.json` → OAuth 2.0 credentials downloaded from Google Cloud Console.  
+   - `token.json` → generated after the first authentication.  
+
+   ### How to obtain `credentials.json`  
+   1. Go to [Google Cloud Console](https://console.cloud.google.com/).  
+   2. Create a new project (or select an existing one).  
+   3. Navigate to **API & Services > Library** and enable the **Gmail API**.  
+   4. Go to **API & Services > Credentials**.  
+   5. Click **Create Credentials > OAuth Client ID**.  
+      * Application type: **Desktop App** (for local testing).  
+   6. Download the JSON file and rename it to `credentials.json`.  
+   7. Place this file inside the `backend/ingestion` folder.  
+
+   ### How to generate `token.json`  
+   1. Activate the virtual environment:  
+
+      ```bash
+      venv\Scripts\activate   # Windows
+      source venv/bin/activate   # Linux/Mac
+      ```  
+
+   2. Navigate into the ingestion folder and run the init script:  
+
+      ```bash
+      cd ingestion
+      python init_gmail.py
+      ```  
+
+   3. A browser window will open asking you to log in with your Gmail account.  
+      - If the app is unverified, click **Advanced > Continue anyway**.  
+      - Make sure your Gmail address is added as a **Test User** in the OAuth consent screen on Google Cloud Console.  
+
+   4. After successful login, a `token.json` file will be created in the same folder.  
+
+   ⚠️ **Note**: Both `credentials.json` and `token.json` are ignored in `.gitignore` and must be created manually by each developer.
+
+7. **Initialize the database**
 
    ```bash
    python -c "from db import Base, engine; Base.metadata.create_all(bind=engine)"
    ```
 
-7. **Start the FastAPI backend server**
+8. **Start the FastAPI backend server**
 
    ```bash
    uvicorn main:app --reload --port 8001
@@ -175,7 +214,7 @@ AI-Agent-Email/
    * The backend runs at: [http://localhost:8001](http://localhost:8001)
    * Interactive API docs: [http://localhost:8001/docs](http://localhost:8001/docs)
 
-8. **Endpoints**
+9. **Endpoints**
 
    * Use `/ingest` to fetch emails from Gmail or IMAP into the DB.
    * Use `/draft` to generate automatic reply drafts.
@@ -183,11 +222,11 @@ AI-Agent-Email/
    * Use `/preferences` to set tone/signature.
    * Use `/feedback` to log user actions.
 
-9. **Next steps after server start**
+10. **Next steps after server start**
 
-   * Use the **API** (e.g. `/draft` endpoint) to generate automatic replies for emails.
-   * Integrate with the **frontend** (when available) to browse threads, see summaries, and apply actions (accept/edit/send).
-   * Check logs in console for feedback and RAG retrieval details.
-   * Add documents to the knowledge base (`rag/knowledge_base.py`) to improve draft quality.
+    * Use the **API** (e.g. `/draft` endpoint) to generate automatic replies for emails.
+    * Integrate with the **frontend** (when available) to browse threads, see summaries, and apply actions (accept/edit/send).
+    * Check logs in console for feedback and RAG retrieval details.
+    * Add documents to the knowledge base (`rag/knowledge_base.py`) to improve draft quality.
 
 
