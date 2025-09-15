@@ -1,7 +1,8 @@
 import imaplib
 import email
 from email.header import decode_header
-from typing import List
+from typing import List, Optional
+from utils.settings import settings
 
 
 class ParsedEmail:
@@ -14,10 +15,17 @@ class ParsedEmail:
 
 
 class IMAPClient:
-    def __init__(self, host: str = "imap.gmail.com", username: str = None, password: str = None):
-        self.host = host
-        self.username = username
-        self.password = password
+    def __init__(
+        self,
+        host: Optional[str] = None,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
+        port: Optional[int] = None,
+    ):
+        self.host = host or settings.IMAP_HOST
+        self.port = port or settings.IMAP_PORT
+        self.username = username or settings.IMAP_USERNAME
+        self.password = password or settings.IMAP_PASSWORD
 
     def fetch_unseen(self) -> List[ParsedEmail]:
         """
@@ -27,7 +35,7 @@ class IMAPClient:
         if not self.username or not self.password:
             return []
 
-        conn = imaplib.IMAP4_SSL(self.host)
+        conn = imaplib.IMAP4_SSL(self.host, self.port)
         conn.login(self.username, self.password)
         conn.select("inbox")
 

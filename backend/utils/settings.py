@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     DB_NAME: str = "email-agent-db"
 
     # OpenAI
-    OPENAI_API_KEY: str = "changeme"
+    OPENAI_API_KEY: str = "your-openai-key"
     OPENAI_MODEL_NAME: str = "gpt-4o-mini"
 
     # Chroma
@@ -22,11 +22,18 @@ class Settings(BaseSettings):
     CHROMA_PORT: int = 8000
     CHROMA_COLLECTION: str = "emails"
 
+    # IMAP
+    IMAP_HOST: str = "imap.libero.it"
+    IMAP_PORT: int = 993
+    IMAP_USERNAME: str = "your-email@libero.it"
+    IMAP_PASSWORD: str = "your-password"
+
     # Security
-    SECRET_KEY: str = "changeme"
+    SECRET_KEY: str = "your-secret-key"
 
     class Config:
         env_file = ".env"
+
 
 
 settings = Settings()
