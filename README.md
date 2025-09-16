@@ -29,61 +29,49 @@ Goal: save time in email management by generating ready-to-send drafts with cons
 ```
 AI-Agent-Email/
 │── backend/
-│   ├── main.py                # FastAPI entrypoint with routing and pipeline orchestration
+│   ├── main.py                  # FastAPI entrypoint with routing and pipeline orchestration
 │   │  
-│   ├── db.py                  # Postgres DB connection + SessionLocal
-│   ├── models.py              # SQLAlchemy models (Email, Thread, Preferences, Events, etc.)
-│   ├── schemas.py             # Pydantic schemas for API request/response
+│   ├── db.py                    # Postgres DB connection + SessionLocal
+│   ├── models.py                # SQLAlchemy models (Email, Thread, Preferences, Events, etc.)
+│   ├── schemas.py               # Pydantic schemas for API request/response
 │   │  
-│   ├── ingestion/  
-│   │   ├── __init__.py  
-│   │   ├── imap_client.py     # IMAP connection, email polling
-│   │   ├── gmail_api.py       # Gmail API integration (OAuth2)
-│   │   ├── parser.py          # Email parsing, attachments, HTML → text cleaning
-│   │   ├── init_gmail.py      # Initializes Gmail API connection and generates authentication token
-│   │   ├── credentials.json   # Contains OAuth2 client credentials for Gmail API access
-│   │   └── token.json         # Stores generated authentication token for Gmail API requests
-│   │  
-│   ├── pipeline/  
-│   │   ├── __init__.py  
-│   │   ├── preprocess.py      # Message body cleaning, signatures, quotes
-│   │   ├── classifier.py      # Intent/priority classifier (ML/LLM)
-│   │   ├── retriever.py       # Context building (thread + KB) with RAG
-│   │   ├── generator.py       # Draft generation with LLM
-│   │   └── guardrails.py      # Validations, PII filters, fallbacks
-│   │  
-│   ├── rag/  
-│   │   ├── __init__.py  
-│   │   ├── vector_store.py    # Embeddings management with Chroma/pgvector
-│   │   ├── embeddings.py      # Embeddings creation (OpenAI, sentence-transformers, etc.)
-│   │   └── knowledge_base.py  # KB documents management and chunking
-│   │  
-│   ├── feedback/  
-│   │   ├── __init__.py  
-│   │   ├── logger.py          # Feedback events logging (drafts accepted, edited, discarded)
-│   │   └── updater.py         # Preferences, templates, dynamic few-shot updates
-│   │  
-│   ├── utils/  
-│   │   ├── __init__.py  
-│   │   ├── llm_helpers.py     # Helper functions to manage LLM outputs
-│   │   ├── settings.py        # Configurations (dotenv/env vars)
-│   │   ├── security.py        # Encryption, secrets management, privacy policies
-│   │   └── templates.py       # Standard email templates and fallbacks
-│   │  
-│   ├── tests/  
-│   │   ├── __init__.py  
-│   │   ├── test_api.py        # FastAPI endpoint tests
-│   │   ├── test_pipeline.py   # End-to-end pipeline tests
-│   │   └── test_db.py         # Model and DB tests
+│   ├── ingestion/               # Handles email ingestion from various sources
+│   ├── pipeline/                # Contains processing logic for email data
+│   ├── rag/                     # Implements retrieval-augmented generation techniques
+│   ├── feedback/                # Manages user feedback and updates
+│   ├── utils/                   # Utility functions and helpers
+│   ├── tests/                   # Contains test cases for the application
 │   │
-│   ├── .env                   # Environment variables configuration
-│   ├── requirements.txt       # Python project dependencies
-│   ├── test_endpoints.ps1     # PowerShell script for testing API endpoints
-│   └── test_endpoints.sh      # Bash script for testing API endpoints
+│   ├── .env                     # Environment variables configuration
+│   ├── requirements.txt         # Python project dependencies
+│   ├── test_endpoints.ps1       # PowerShell script for testing API endpoints
+│   └── test_endpoints.sh        # Bash script for testing API endpoints
 │
-├── README.md                  # Main project documentation
-├── .gitignore                 # Files and folders to exclude from version control
-└── LICENSE                    # Software license
+│   frontend/
+│   ├── app/
+│   │   ├── layout.tsx           # Main layout (header, sidebar, theme)
+│   │   ├── page.tsx             # Dashboard Inbox (default view)
+│   │   │
+│   │   ├── threads/             # Single thread/email page
+│   │   ├── settings/            # User preferences
+│   │   ├── kb/                  # Knowledge Base management
+│   │   ├── api/                 # Client-side wrapper for backend calls
+│   │   │
+│   │   ├── components/          # Reusable UI components
+│   │   │
+│   │   ├── styles/              # Global styles and Tailwind config
+│   │   ├── lib/                 # Generic utilities
+│   │   └── types/               # Shared types
+│   │
+│   ├── .env.local               # Environment variables for frontend configuration
+│   ├── package.json             # Project metadata and dependencies for Node.js
+│   ├── tsconfig.json            # TypeScript configuration file
+│   ├── tailwind.config.js       # Configuration for Tailwind CSS
+│   └── next.config.js           # Configuration for Next.js
+│
+├── README.md                    # Main project documentation
+├── .gitignore                   # Files and folders to exclude from version control
+└── LICENSE                      # Software license
 ````
 
 ---
