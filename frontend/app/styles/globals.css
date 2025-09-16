@@ -2,8 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global overrides */
+/* Custom global styles */
 body {
-  font-family: system-ui, sans-serif;
-  background-color: #f9fafb;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(to right, #f9fafb, #f3f4f6);
+  color: #1f2937;
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
 }

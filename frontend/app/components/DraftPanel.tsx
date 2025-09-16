@@ -50,9 +50,9 @@ export default function DraftPanel() {
       <button
         onClick={handleGenerate}
         disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+        className="bg-gradient-to-r from-primary to-primary-dark text-white px-5 py-2 rounded-lg font-semibold shadow-md hover:opacity-90 disabled:opacity-50"
       >
-        {loading ? "Generating..." : "Generate"}
+        {loading ? "Generating..." : "✨ Generate Draft"}
       </button>
 
       {loading && <Loader />}
@@ -60,9 +60,15 @@ export default function DraftPanel() {
       {drafts && (
         <div className="mt-4 space-y-3">
           <h3 className="font-semibold">Generated Drafts</h3>
-          <ul className="list-disc pl-6 space-y-2">
+          <ul className="space-y-3">
             {drafts.variants.map((d, i) => (
-              <li key={i} className="bg-gray-50 p-2 rounded">
+              <li
+                key={i}
+                className="p-3 bg-gray-50 rounded-lg border hover:bg-white hover:shadow-md transition"
+              >
+                <span className="inline-block px-2 py-0.5 mb-2 text-xs rounded-full bg-accent-light text-white">
+                  Draft {i + 1}
+                </span>
                 <p>{d}</p>
                 <FeedbackButtons draftText={d} />
               </li>

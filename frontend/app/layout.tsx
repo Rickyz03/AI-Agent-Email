@@ -14,23 +14,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-gray-50 text-gray-900">
-        <div className="flex h-screen">
+        <div className="flex h-screen gap-4">
           {/* Sidebar */}
-          <aside className="w-64 bg-white border-r shadow-sm p-4 flex flex-col">
-            <h1 className="text-xl font-bold mb-6">AI Agent Email</h1>
-            <nav className="flex flex-col space-y-2">
-              <Link href="/" className="hover:text-blue-600">
-                Inbox
-              </Link>
-              <Link href="/manual" className="hover:text-blue-600">
-                Manual Draft
-              </Link>
-              <Link href="/settings" className="hover:text-blue-600">
-                Preferences
-              </Link>
-              <Link href="/kb" className="hover:text-blue-600">
-                Knowledge Base
-              </Link>
+          <aside className="w-64 bg-gradient-to-b from-primary-dark to-primary p-6 text-white flex flex-col shadow-lg">
+            <h1 className="text-2xl font-extrabold mb-8 tracking-tight">📧 AI Agent</h1>
+            <nav className="flex flex-col space-y-3">
+              <Link href="/" className="hover:bg-primary-light/20 p-2 rounded-md">📥 Inbox</Link>
+              <Link href="/manual" className="hover:bg-primary-light/20 p-2 rounded-md">✍️ Manual Draft</Link>
+              <Link href="/settings" className="hover:bg-primary-light/20 p-2 rounded-md">⚙️ Preferences</Link>
+              <Link href="/kb" className="hover:bg-primary-light/20 p-2 rounded-md">📚 Knowledge Base</Link>
             </nav>
           </aside>
 
