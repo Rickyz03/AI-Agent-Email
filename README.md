@@ -133,7 +133,7 @@ AI-Agent-Email/
 
 5. **Configure environment variables**
 
-   Copy `.env` (example provided in repo) and set your credentials:
+   Copy `.env` in the _backend/_ folder and set your credentials:
 
    ```env
    # Database
@@ -171,6 +171,12 @@ AI-Agent-Email/
      ```bash
      python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
      ```
+
+   Then, copy `.env.local` in the _frontend/_ folder:
+
+   ```env
+   NEXT_PUBLIC_API_BASE_URL=http://localhost:8001
+   ```
 
 6. **Prepare Gmail API credentials**
 
