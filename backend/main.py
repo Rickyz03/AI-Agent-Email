@@ -7,7 +7,7 @@ from langchain_openai import ChatOpenAI
 from db import SessionLocal, Base, engine
 from models import Email, Thread, Preference
 from schemas import (
-    EmailIn, EmailOut, DraftOut, PreferenceIn, PreferenceOut, KBIndexIn
+    EmailIn, EmailOut, DraftOut, PreferenceIn, PreferenceOut, KBIndexIn, FeedbackIn
 )
 from ingestion.imap_client import IMAPClient
 from ingestion.gmail_api import GmailAPI
@@ -244,9 +244,6 @@ def get_preferences(db: Session = Depends(get_db)):
 
 # ========== FEEDBACK ==========
 @app.post("/feedback")
-def feedback(event_type: str, metadata: dict):
-    """
-    Log user feedback (draft accepted, edited, rejected).
-    """
-    log_event(event_type=event_type, metadata=metadata)
+def feedback(data: FeedbackIn):
+    log_event(event_type=data.event_type, metadata=data.metadata)
     return {"status": "logged"}

@@ -72,3 +72,10 @@ class DocumentIn(BaseModel):
 
 class KBIndexIn(BaseModel):
     documents: List[DocumentIn]
+
+
+# ========== FEEDBACK ==========
+
+class FeedbackIn(BaseModel):
+    event_type: str
+    metadata: dict
