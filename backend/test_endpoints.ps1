@@ -68,16 +68,25 @@ Invoke-RestMethod -Uri "$backendHost/preferences" -Method GET
 # FEEDBACK
 # -------------------------
 # Log feedback: bozza accettata
-Invoke-RestMethod -Uri "$backendHost/feedback?event_type=draft_accepted" `
+Invoke-RestMethod -Uri "$backendHost/feedback" `
   -Method POST -ContentType "application/json" `
-  -Body (@{ metadata = @{ email_id = 1; variant = 0 } } | ConvertTo-Json -Depth 3)
+  -Body (@{
+    event_type = "draft_accepted"
+    metadata   = @{ email_id = 1; variant = 0 }
+  } | ConvertTo-Json -Depth 3)
 
 # Log feedback: bozza rifiutata
-Invoke-RestMethod -Uri "$backendHost/feedback?event_type=draft_rejected" `
+Invoke-RestMethod -Uri "$backendHost/feedback" `
   -Method POST -ContentType "application/json" `
-  -Body (@{ metadata = @{ email_id = 2; reason = "non rilevante" } } | ConvertTo-Json -Depth 3)
+  -Body (@{
+    event_type = "draft_rejected"
+    metadata   = @{ email_id = 2; reason = "non rilevante" }
+  } | ConvertTo-Json -Depth 3)
 
 # Log feedback: bozza modificata
-Invoke-RestMethod -Uri "$backendHost/feedback?event_type=draft_edited" `
+Invoke-RestMethod -Uri "$backendHost/feedback" `
   -Method POST -ContentType "application/json" `
-  -Body (@{ metadata = @{ email_id = 3; diff = "aggiunto saluto finale" } } | ConvertTo-Json -Depth 3)
+  -Body (@{
+    event_type = "draft_edited"
+    metadata   = @{ email_id = 3; diff = "aggiunto saluto finale" }
+  } | ConvertTo-Json -Depth 3)
