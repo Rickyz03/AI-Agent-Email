@@ -1,10 +1,11 @@
-import DraftPanel from "./components/DraftPanel";
+import InboxList from "./components/InboxList";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-8">
-      <h1 className="text-3xl font-bold mb-6">AI Agent Email Dashboard</h1>
-      <DraftPanel />
-    </main>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold">Inbox</h2>
+      {/* Email/threads list */}
+      <InboxList />
+    </div>
   );
 }

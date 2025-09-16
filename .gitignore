@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/ Serve per Next.js
 lib64/
 parts/
 sdist/

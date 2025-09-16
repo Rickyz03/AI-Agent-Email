@@ -1,6 +1,8 @@
+// TypeScript interfaces matching FastAPI schemas
+
 export interface EmailIn {
-  id?: string;
-  thread_id?: string;
+  id?: string | number;
+  thread_id?: string | number;
   subject: string;
   body: string;
   from_addr: string;
@@ -16,3 +18,11 @@ export interface DraftOut {
   priority: string;
   summary: string;
 }
+
+export interface PreferenceIn {
+  tone_default: string;
+  sign_off: string;
+  signature_block: string;
+}
+
+export type PreferenceOut = PreferenceIn;
