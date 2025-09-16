@@ -160,6 +160,9 @@ AI-Agent-Email/
 
    # Security
    SECRET_KEY=your-secret-key
+
+   # Signing name
+   SIGNING_NAME=Name Surname
    ```
 
    * **SECRET\_KEY**: used to encrypt/decrypt sensitive data.

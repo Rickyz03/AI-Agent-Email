@@ -1,6 +1,7 @@
 from typing import List
 from langchain_openai import ChatOpenAI
 from utils.llm_helpers import extract_text_from_llm
+from utils.settings import settings
 
 
 def generate_drafts(subject: str, body: str, context: str, llm: ChatOpenAI) -> List[str]:
@@ -15,7 +16,8 @@ def generate_drafts(subject: str, body: str, context: str, llm: ChatOpenAI) -> L
         "- Be polite and professional.\n"
         "- Respect the detected intent and priority.\n"
         "- Be concise and clear.\n"
-        "- Adapt to the provided context if available.\n\n"
+        "- Adapt to the provided context if available.\n"
+        f"- Be signed with the user's name, that is {settings.SIGNING_NAME}.\n\n"
         "Return only the three drafts separated by '---', without extra explanations."
     )
 

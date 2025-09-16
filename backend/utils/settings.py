@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str = "your-secret-key"
 
+    # Signing name
+    SIGNING_NAME: str = "Name Surname"
+
     class Config:
         env_file = ".env"
 
