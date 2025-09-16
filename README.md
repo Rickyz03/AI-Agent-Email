@@ -214,6 +214,7 @@ AI-Agent-Email/
 │   │   ├── page.tsx             # Dashboard Inbox (default view)
 │   │   │
 │   │   ├── threads/             # Single thread/email page
+│   │   ├── manual/              # Manual Form for AI Draft Generator
 │   │   ├── settings/            # User preferences
 │   │   ├── kb/                  # Knowledge Base management
 │   │   ├── api/                 # Client-side wrapper for backend calls
