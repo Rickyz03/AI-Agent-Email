@@ -24,58 +24,6 @@ Goal: save time in email management by generating ready-to-send drafts with cons
 
 ---
 
-## 📂 Project Structure
-
-```
-AI-Agent-Email/
-│── backend/
-│   ├── main.py                  # FastAPI entrypoint with routing and pipeline orchestration
-│   │  
-│   ├── db.py                    # Postgres DB connection + SessionLocal
-│   ├── models.py                # SQLAlchemy models (Email, Thread, Preferences, Events, etc.)
-│   ├── schemas.py               # Pydantic schemas for API request/response
-│   │  
-│   ├── ingestion/               # Handles email ingestion from various sources
-│   ├── pipeline/                # Contains processing logic for email data
-│   ├── rag/                     # Implements retrieval-augmented generation techniques
-│   ├── feedback/                # Manages user feedback and updates
-│   ├── utils/                   # Utility functions and helpers
-│   ├── tests/                   # Contains test cases for the application
-│   │
-│   ├── .env                     # Environment variables configuration
-│   ├── requirements.txt         # Python project dependencies
-│   ├── test_endpoints.ps1       # PowerShell script for testing API endpoints
-│   └── test_endpoints.sh        # Bash script for testing API endpoints
-│
-│   frontend/
-│   ├── app/
-│   │   ├── layout.tsx           # Main layout (header, sidebar, theme)
-│   │   ├── page.tsx             # Dashboard Inbox (default view)
-│   │   │
-│   │   ├── threads/             # Single thread/email page
-│   │   ├── settings/            # User preferences
-│   │   ├── kb/                  # Knowledge Base management
-│   │   ├── api/                 # Client-side wrapper for backend calls
-│   │   │
-│   │   ├── components/          # Reusable UI components
-│   │   │
-│   │   ├── styles/              # Global styles and Tailwind config
-│   │   ├── lib/                 # Generic utilities
-│   │   └── types/               # Shared types
-│   │
-│   ├── .env.local               # Environment variables for frontend configuration
-│   ├── package.json             # Project metadata and dependencies for Node.js
-│   ├── tsconfig.json            # TypeScript configuration file
-│   ├── tailwind.config.js       # Configuration for Tailwind CSS
-│   └── next.config.js           # Configuration for Next.js
-│
-├── README.md                    # Main project documentation
-├── .gitignore                   # Files and folders to exclude from version control
-└── LICENSE                      # Software license
-````
-
----
-
 ## ⚙️ Local Setup (Dev)
 
 1. **Clone the repository**
@@ -234,4 +182,56 @@ AI-Agent-Email/
    * Integrate with the **frontend** (when available) to browse threads, see summaries, and apply actions (accept/edit/send).
    * Check logs in console for feedback and RAG retrieval details.
    * Add documents to the knowledge base (`rag/knowledge_base.py`) to improve draft quality.
+
+---
+
+## 📂 Project Structure
+
+```
+AI-Agent-Email/
+│── backend/
+│   ├── main.py                  # FastAPI entrypoint with routing and pipeline orchestration
+│   │  
+│   ├── db.py                    # Postgres DB connection + SessionLocal
+│   ├── models.py                # SQLAlchemy models (Email, Thread, Preferences, Events, etc.)
+│   ├── schemas.py               # Pydantic schemas for API request/response
+│   │  
+│   ├── ingestion/               # Handles email ingestion from various sources
+│   ├── pipeline/                # Contains processing logic for email data
+│   ├── rag/                     # Implements retrieval-augmented generation techniques
+│   ├── feedback/                # Manages user feedback and updates
+│   ├── utils/                   # Utility functions and helpers
+│   ├── tests/                   # Contains test cases for the application
+│   │
+│   ├── .env                     # Environment variables configuration
+│   ├── requirements.txt         # Python project dependencies
+│   ├── test_endpoints.ps1       # PowerShell script for testing API endpoints
+│   └── test_endpoints.sh        # Bash script for testing API endpoints
+│
+│   frontend/
+│   ├── app/
+│   │   ├── layout.tsx           # Main layout (header, sidebar, theme)
+│   │   ├── page.tsx             # Dashboard Inbox (default view)
+│   │   │
+│   │   ├── threads/             # Single thread/email page
+│   │   ├── settings/            # User preferences
+│   │   ├── kb/                  # Knowledge Base management
+│   │   ├── api/                 # Client-side wrapper for backend calls
+│   │   │
+│   │   ├── components/          # Reusable UI components
+│   │   │
+│   │   ├── styles/              # Global styles and Tailwind config
+│   │   ├── lib/                 # Generic utilities
+│   │   └── types/               # Shared types
+│   │
+│   ├── .env.local               # Environment variables for frontend configuration
+│   ├── package.json             # Project metadata and dependencies for Node.js
+│   ├── tsconfig.json            # TypeScript configuration file
+│   ├── tailwind.config.js       # Configuration for Tailwind CSS
+│   └── next.config.js           # Configuration for Next.js
+│
+├── README.md                    # Main project documentation
+├── .gitignore                   # Files and folders to exclude from version control
+└── LICENSE                      # Software license
+````
 
