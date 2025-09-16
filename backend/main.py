@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 from langchain_openai import ChatOpenAI
@@ -29,6 +30,15 @@ from utils.main_helpers import (
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="AI Agent Email")
+
+# CORS settings
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # frontend Next.js
+    allow_credentials=True,
+    allow_methods=["*"],  # GET, POST, OPTIONS, ecc.
+    allow_headers=["*"],
+)
 
 
 # Dependency for DB session
