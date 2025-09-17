@@ -15,7 +15,7 @@ export default function Sidebar() {
 
   return (
     <aside className="w-64 bg-gray-900 p-6 text-white flex flex-col shadow-lg">
-      <h1 className="text-2xl font-extrabold mb-8 tracking-tight">📧 AI Agent</h1>
+      <h1 className="text-2xl font-extrabold mb-8 tracking-tight">📧 AI Agent Email</h1>
       <nav className="flex flex-col space-y-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
