@@ -16,10 +16,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <aside className="w-64 bg-gray-900 p-6 text-white flex flex-col shadow-lg">
             <h1 className="text-2xl font-extrabold mb-8 tracking-tight">📧 AI Agent</h1>
             <nav className="flex flex-col space-y-3">
-              <Link href="/" className="hover:bg-primary-light/20 p-2 rounded-md">📥 Inbox</Link>
-              <Link href="/manual" className="hover:bg-primary-light/20 p-2 rounded-md">✍️ Manual Draft</Link>
-              <Link href="/settings" className="hover:bg-primary-light/20 p-2 rounded-md">⚙️ Preferences</Link>
-              <Link href="/kb" className="hover:bg-primary-light/20 p-2 rounded-md">📚 Knowledge Base</Link>
+              <Link
+                href="/"
+                className="p-2 rounded-md hover:bg-primary-light/20 hover:cursor-pointer transition-colors"
+              >
+                📥 Inbox
+              </Link>
+              <Link
+                href="/manual"
+                className="p-2 rounded-md hover:bg-primary-light/20 hover:cursor-pointer transition-colors"
+              >
+                ✍️ Manual Draft
+              </Link>
+              <Link
+                href="/settings"
+                className="p-2 rounded-md hover:bg-primary-light/20 hover:cursor-pointer transition-colors"
+              >
+                ⚙️ Preferences
+              </Link>
+              <Link
+                href="/kb"
+                className="p-2 rounded-md hover:bg-primary-light/20 hover:cursor-pointer transition-colors"
+              >
+                📚 Knowledge Base
+              </Link>
             </nav>
           </aside>
 

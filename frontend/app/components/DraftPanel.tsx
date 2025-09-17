@@ -50,7 +50,8 @@ export default function DraftPanel() {
       <button
         onClick={handleGenerate}
         disabled={loading}
-        className="bg-gradient-to-r from-primary to-primary-dark text-white px-5 py-2 rounded-lg font-semibold shadow-md hover:opacity-90 disabled:opacity-50"
+        className="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold shadow-md 
+                  hover:bg-blue-700 hover:cursor-pointer disabled:opacity-50 transition-colors"
       >
         {loading ? "Generating..." : "✨ Generate Draft"}
       </button>
