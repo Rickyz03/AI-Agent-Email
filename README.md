@@ -212,6 +212,7 @@ AI-Agent-Email/
 │   ├── app/
 │   │   ├── layout.tsx           # Main layout (header, sidebar, theme)
 │   │   ├── page.tsx             # Dashboard Inbox (default view)
+│   │   ├── globals.css          # Global styles and Tailwind config
 │   │   │
 │   │   ├── threads/             # Single thread/email page
 │   │   ├── manual/              # Manual Form for AI Draft Generator
@@ -221,7 +222,6 @@ AI-Agent-Email/
 │   │   │
 │   │   ├── components/          # Reusable UI components
 │   │   │
-│   │   ├── styles/              # Global styles and Tailwind config
 │   │   ├── lib/                 # Generic utilities
 │   │   └── types/               # Shared types
 │   │
