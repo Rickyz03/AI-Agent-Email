@@ -12,11 +12,17 @@ Invoke-RestMethod -Uri "$backendHost/" -Method GET
 # -------------------------
 # INGESTION
 # -------------------------
-# Ingest da IMAP
+# Ingest da IMAP - tutte le email (default)
 Invoke-RestMethod -Uri "$backendHost/ingest?provider=imap" -Method POST
 
-# Ingest da Gmail
+# Ingest da IMAP - solo email non lette
+Invoke-RestMethod -Uri "$backendHost/ingest?provider=imap&unread=true" -Method POST
+
+# Ingest da Gmail - tutte le email (default)
 Invoke-RestMethod -Uri "$backendHost/ingest?provider=gmail" -Method POST
+
+# Ingest da Gmail - solo email non lette
+Invoke-RestMethod -Uri "$backendHost/ingest?provider=gmail&unread=true" -Method POST
 
 # -------------------------
 # DRAFT GENERATION
