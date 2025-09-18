@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: email-agent-user
+      POSTGRES_PASSWORD: email-agent-psw
+      POSTGRES_DB: email-agent-db
+      TZ: Europe/Rome
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: chroma-db
+    environment:
+      TZ: Europe/Rome
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/chroma
+
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      TZ: Europe/Rome
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - postgres
+      - chroma
+    ports:
+      - "8001:8001"
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    environment:
+      TZ: Europe/Rome
+    env_file:
+      - ./frontend/.env.local
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
+  chroma_data:
