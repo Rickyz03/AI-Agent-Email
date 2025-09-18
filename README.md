@@ -229,8 +229,10 @@ AI-Agent-Email/
 │   ├── utils/                   # Utility functions and helpers
 │   ├── tests/                   # Contains test cases for the application
 │   │
+│   ├── Dockerfile               # Docker image for backend service
 │   ├── .env                     # Environment variables configuration
 │   ├── requirements.txt         # Python project dependencies
+│   ├── .gitignore               # Backend files and folders to exclude from version control
 │   ├── test_endpoints.ps1       # PowerShell script for testing API endpoints
 │   └── test_endpoints.sh        # Bash script for testing API endpoints
 │
@@ -251,14 +253,16 @@ AI-Agent-Email/
 │   │   ├── lib/                 # Generic utilities
 │   │   └── types/               # Shared types
 │   │
+│   ├── Dockerfile               # Docker image for frontend service
 │   ├── .env.local               # Environment variables for frontend configuration
 │   ├── package.json             # Project metadata and dependencies for Node.js
+│   ├── .gitignore               # Frontend files and folders to exclude from version control
 │   ├── tsconfig.json            # TypeScript configuration file
 │   ├── tailwind.config.js       # Configuration for Tailwind CSS
 │   └── next.config.js           # Configuration for Next.js
 │
+├── docker-compose.yml           # Docker Compose configuration for local development
 ├── README.md                    # Main project documentation
-├── .gitignore                   # Files and folders to exclude from version control
 └── LICENSE                      # Software license
 ````
 
