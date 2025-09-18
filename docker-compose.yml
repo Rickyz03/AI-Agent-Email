@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:17
-    container_name: postgres-db
+    container_name: postgres-relational-db
     environment:
       POSTGRES_USER: email-agent-user
       POSTGRES_PASSWORD: email-agent-psw
@@ -14,7 +14,7 @@ services:
 
   chroma:
     image: chromadb/chroma:latest
-    container_name: chroma-db
+    container_name: chroma-vector-db
     environment:
       TZ: Europe/Rome
     ports:
