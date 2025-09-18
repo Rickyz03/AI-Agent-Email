@@ -73,7 +73,7 @@ export default function ThreadDetailPage() {
       <h2 className="text-xl font-bold">Thread #{id}</h2>
       <div className="space-y-4">
         {emails.map((email) => (
-          <EmailCard key={email.id} email={email} />
+          <EmailCard key={email.id} email={email} interactive={false} />
         ))}
       </div>
 
