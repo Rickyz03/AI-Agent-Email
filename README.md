@@ -158,13 +158,7 @@ Goal: save time in email management by generating ready-to-send drafts with cons
 
    ⚠️ **Note**: Both `credentials.json` and `token.json` are ignored in `.gitignore` and must be created manually by each developer.
 
-7. **Initialize the database**
-
-   ```bash
-   python -c "from db import Base, engine; Base.metadata.create_all(bind=engine)"
-   ```
-
-8. **Start the FastAPI backend server**
+7. **Start the FastAPI backend server**
 
    ```bash
    uvicorn main:app --reload --port 8001
@@ -173,7 +167,7 @@ Goal: save time in email management by generating ready-to-send drafts with cons
    * The backend runs at: [http://localhost:8001](http://localhost:8001)
    * Interactive API docs: [http://localhost:8001/docs](http://localhost:8001/docs)
 
-9. **Endpoints**
+8. **Endpoints**
 
    * Use `/ingest` to fetch emails from Gmail or IMAP into the DB.
    * Use `/draft` to generate automatic reply drafts.
@@ -181,7 +175,7 @@ Goal: save time in email management by generating ready-to-send drafts with cons
    * Use `/preferences` to set tone/signature.
    * Use `/feedback` to log user actions.
 
-10. **Start the Next.js frontend**
+9. **Start the Next.js frontend**
 
    * Open a new terminal (keep the backend running on port `8001`).
 
@@ -207,7 +201,7 @@ Goal: save time in email management by generating ready-to-send drafts with cons
 
 ---
 
-11. **Next steps after full stack startup**
+10. **Next steps after full stack startup**
 
 * Browse the **Inbox** dashboard at [http://localhost:3000](http://localhost:3000).
 * Generate drafts with the **AI Draft Panel** or manually via **Manual Draft**.
