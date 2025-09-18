@@ -68,7 +68,7 @@ def root():
 def ingest_emails(provider: str, unread: bool = False, n: int = 50, db: Session = Depends(get_db)):
     """
     Fetch emails from IMAP/Gmail:
-    - If unread=True → fetch only unseen/unread emails.
+    - If unread=True → fetch the last n unread emails.
     - Otherwise → fetch the last n emails (default 50).
     The mails are saved into DB.
     Returns the saved emails (with decrypted addresses for output).
@@ -76,13 +76,13 @@ def ingest_emails(provider: str, unread: bool = False, n: int = 50, db: Session 
     if provider == "imap":
         client = IMAPClient()
         if unread:
-            messages = client.fetch_unseen()
+            messages = client.fetch_n_unread_mails(n)
         else:
             messages = client.fetch_n_mails(n)
     elif provider == "gmail":
         client = GmailAPI()
         if unread:
-            messages = client.fetch_unread()
+            messages = client.fetch_n_unread_mails(n)
         else:
             messages = client.fetch_n_mails(n)
     else:

@@ -25,11 +25,14 @@ class GmailAPI:
         # Build service
         self.service = build("gmail", "v1", credentials=self.creds)
 
-    def fetch_unread(self) -> List[ParsedEmail]:
+
+    def fetch_n_unread_mails(self, n: int) -> List[ParsedEmail]:
         """
-        Fetch unread messages from Gmail inbox.
+        Fetch the last n unread messages from Gmail inbox.
         """
-        results = self.service.users().messages().list(userId="me", q="is:unread").execute()
+        results = self.service.users().messages().list(
+            userId="me", q="is:unread", maxResults=n
+        ).execute()
         messages = results.get("messages", [])
         parsed_emails = []
 

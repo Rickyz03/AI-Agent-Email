@@ -27,9 +27,10 @@ class IMAPClient:
         self.username = username or settings.IMAP_USERNAME
         self.password = password or settings.IMAP_PASSWORD
 
-    def fetch_unseen(self) -> List[ParsedEmail]:
+
+    def fetch_n_unread_mails(self, n: int) -> List[ParsedEmail]:
         """
-        Connect to IMAP server and fetch unseen emails.
+        Connect to IMAP server and fetch the last n unseen emails.
         Returns a list of ParsedEmail objects.
         """
         if not self.username or not self.password:
@@ -40,9 +41,11 @@ class IMAPClient:
         conn.select("inbox")
 
         status, messages = conn.search(None, "UNSEEN")
-        parsed_emails = []
+        all_ids = messages[0].split()
+        last_n_ids = all_ids[-n:] if n > 0 else all_ids
 
-        for num in messages[0].split():
+        parsed_emails = []
+        for num in last_n_ids:
             _, data = conn.fetch(num, "(RFC822)")
             raw_email = data[0][1]
             msg = email.message_from_bytes(raw_email)
