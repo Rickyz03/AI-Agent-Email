@@ -61,3 +61,42 @@ class GmailAPI:
             )
 
         return parsed_emails
+
+
+    def fetch_n_mails(self, n: int) -> List[ParsedEmail]:
+        """
+        Fetch the last n messages from Gmail inbox.
+        """
+        results = self.service.users().messages().list(userId="me", maxResults=n).execute()
+        messages = results.get("messages", [])
+        parsed_emails = []
+
+        for msg in messages:
+            msg_data = self.service.users().messages().get(userId="me", id=msg["id"]).execute()
+            payload = msg_data["payload"]
+            headers = payload["headers"]
+
+            subject = next((h["value"] for h in headers if h["name"] == "Subject"), "")
+            from_addr = next((h["value"] for h in headers if h["name"] == "From"), "")
+            to_addrs = [h["value"] for h in headers if h["name"] == "To"]
+
+            body = ""
+            if "data" in payload["body"]:
+                body = base64.urlsafe_b64decode(payload["body"]["data"]).decode("utf-8")
+            elif "parts" in payload:
+                for part in payload["parts"]:
+                    if part["mimeType"] == "text/plain":
+                        body = base64.urlsafe_b64decode(part["body"]["data"]).decode("utf-8")
+                        break
+
+            parsed_emails.append(
+                ParsedEmail(
+                    subject=subject,
+                    from_addr=from_addr,
+                    to_addrs=to_addrs,
+                    body=body,
+                )
+            )
+
+        return parsed_emails
+

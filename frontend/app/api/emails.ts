@@ -3,14 +3,13 @@ import { EmailIn, DraftOut } from "../types/api";
 
 // Fetch emails or threads from backend ingestion
 export async function fetchInbox(): Promise<EmailIn[]> {
-  const res = await api.post<EmailIn[]>("/ingest?provider=imap");
+  const res = await api.post<EmailIn[]>("/ingest?provider=imap&n=50");
   return res.data;
 }
 
-// Fetch a specific thread by id (placeholder, depends on backend implementation)
+// Fetch a specific thread by id
 export async function fetchThreadById(threadId: string): Promise<EmailIn[]> {
-  // For now, reuse /ingest or adjust when a /thread/{id} endpoint exists
-  const res = await api.post<EmailIn[]>("/ingest?provider=imap");
+  const res = await api.post<EmailIn[]>("/ingest?provider=imap&n=50");
   return res.data.filter((email) => email.thread_id === Number(threadId));
 }
 

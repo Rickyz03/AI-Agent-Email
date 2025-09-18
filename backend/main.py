@@ -65,17 +65,26 @@ def root():
 
 # ========== INGESTION ==========
 @app.post("/ingest", response_model=List[EmailOut])
-def ingest_emails(provider: str, db: Session = Depends(get_db)):
+def ingest_emails(provider: str, unread: bool = False, n: int = 50, db: Session = Depends(get_db)):
     """
-    Fetch unread emails from IMAP/Gmail and save them into DB.
+    Fetch emails from IMAP/Gmail:
+    - If unread=True → fetch only unseen/unread emails.
+    - Otherwise → fetch the last n emails (default 50).
+    The mails are saved into DB.
     Returns the saved emails (with decrypted addresses for output).
     """
     if provider == "imap":
         client = IMAPClient()
-        messages = client.fetch_unseen()
+        if unread:
+            messages = client.fetch_unseen()
+        else:
+            messages = client.fetch_n_mails(n)
     elif provider == "gmail":
         client = GmailAPI()
-        messages = client.fetch_unread()
+        if unread:
+            messages = client.fetch_unread()
+        else:
+            messages = client.fetch_n_mails(n)
     else:
         raise HTTPException(status_code=400, detail="Unsupported provider")
 
