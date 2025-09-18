@@ -14,14 +14,6 @@ export async function fetchInbox(): Promise<EmailIn[]> {
   return res.data;
 }
 
-// Fetch a specific thread by id
-export async function fetchThreadById(threadId: string): Promise<EmailIn[]> {
-  const res = await api.post<EmailIn[]>(
-    `/ingest?provider=${PROVIDER}&unread=${UNREAD}&n=${N}`
-  );
-  return res.data.filter((email) => email.thread_id === Number(threadId));
-}
-
 // Generate draft from email input
 export async function generateDraft(email: EmailIn): Promise<DraftOut> {
   const res = await api.post<DraftOut>("/draft", email);

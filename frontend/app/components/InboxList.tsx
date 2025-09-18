@@ -16,6 +16,14 @@ export default function InboxList() {
       try {
         const data = await fetchInbox();
         setEmails(data);
+
+        // OPTIONAL: cache inbox so thread page can try to rebuild if needed
+        try {
+          sessionStorage.setItem("ai_inbox_cache", JSON.stringify(data));
+        } catch (e) {
+          // sessionStorage may not be available in certain environments
+          console.warn("sessionStorage not available:", e);
+        }
       } finally {
         setLoading(false);
       }
@@ -27,11 +35,27 @@ export default function InboxList() {
 
   return (
     <div className="space-y-4">
-      {emails.map((email) => (
-        <Link key={email.id} href={`/threads/${email.thread_id}`}>
-          <EmailCard email={email} />
-        </Link>
-      ))}
+      {emails.map((email) => {
+        const storageKey = `ai_selected_email_${email.thread_id}`;
+        const storeEmail = () => {
+          try {
+            sessionStorage.setItem(storageKey, JSON.stringify(email));
+          } catch (e) {
+            console.warn("Unable to write to sessionStorage:", e);
+          }
+        };
+
+        return (
+          <Link
+            key={email.id}
+            href={`/threads/${email.thread_id}`}
+            onMouseDown={storeEmail}
+            onClick={storeEmail} // double write for robustness
+          >
+            <EmailCard email={email} />
+          </Link>
+        );
+      })}
     </div>
   );
 }

@@ -6,7 +6,6 @@ import DraftPanel from "../../components/DraftPanel";
 import EmailCard from "../../components/EmailCard";
 import Loader from "../../components/Loader";
 import { EmailIn } from "../../types/api";
-import { fetchThreadById } from "../../api/emails";
 
 export default function ThreadDetailPage() {
   const { id } = useParams();
@@ -14,32 +13,70 @@ export default function ThreadDetailPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function load() {
+    function loadFromSession() {
       try {
-        const data = await fetchThreadById(id as string);
-        console.log("fetchThreadById:", data); // debug
-        setEmails(data);
+        // 1) Try directly the single email saved on click
+        const raw = typeof window !== "undefined"
+          ? sessionStorage.getItem(`ai_selected_email_${id}`)
+          : null;
+
+        if (raw) {
+          try {
+            const email = JSON.parse(raw) as EmailIn;
+            setEmails([email]);
+            return;
+          } catch (e) {
+            console.error("Parsing selected email failed:", e);
+          }
+        }
+
+        // 2) Fallback: try to reconstruct from inbox cache (optional)
+        const inboxRaw = typeof window !== "undefined" ? sessionStorage.getItem("ai_inbox_cache") : null;
+        if (inboxRaw) {
+          try {
+            const inbox = JSON.parse(inboxRaw) as EmailIn[];
+            const filtered = inbox.filter((em) => String(em.thread_id) === String(id));
+            setEmails(filtered);
+            return;
+          } catch (e) {
+            console.warn("Parsing inbox cache failed:", e);
+          }
+        }
+
+        // 3) If everything fails, we remain with an empty array
+        setEmails([]);
       } finally {
         setLoading(false);
       }
     }
-    load();
+
+    loadFromSession();
   }, [id]);
 
   if (loading) return <Loader />;
 
-  const latestEmail = emails.length ? emails[emails.length - 1] : undefined;
+  if (!emails.length) {
+    return (
+      <div className="p-6">
+        <h2 className="text-xl font-bold">Thread #{id}</h2>
+        <p className="text-sm text-gray-500">
+          No emails available for this thread. Go back to the Inbox and select the email from which you want to generate a draft.
+        </p>
+      </div>
+    );
+  }
+
+  const latestEmail = emails[emails.length - 1];
 
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-bold">Thread #{id}</h2>
       <div className="space-y-4">
-      {emails.map((email) => (
-        <EmailCard key={email.id} email={email} />
-      ))}
+        {emails.map((email) => (
+          <EmailCard key={email.id} email={email} />
+        ))}
       </div>
 
-      {/* pass latestEmail and use key to force remount if id changes */}
       <DraftPanel key={latestEmail?.id ?? "no-email"} email={latestEmail} />
     </div>
   );
