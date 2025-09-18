@@ -176,12 +176,39 @@ Goal: save time in email management by generating ready-to-send drafts with cons
    * Use `/preferences` to set tone/signature.
    * Use `/feedback` to log user actions.
 
-10. **Next steps after server start**
+10. **Start the Next.js frontend**
 
-   * Use the **API** (e.g. `/draft` endpoint) to generate automatic replies for emails.
-   * Integrate with the **frontend** (when available) to browse threads, see summaries, and apply actions (accept/edit/send).
-   * Check logs in console for feedback and RAG retrieval details.
-   * Add documents to the knowledge base (`rag/knowledge_base.py`) to improve draft quality.
+   * Open a new terminal (keep the backend running on port `8001`).
+
+   * Move into the `frontend/` folder:
+
+      ```bash
+      cd ../frontend
+      ```
+
+   * Install dependencies:
+
+      ```bash
+      npm install
+      ```
+
+   * Start the development server:
+
+      ```bash
+      npm run dev
+      ```
+
+      * The frontend runs at: [http://localhost:3000](http://localhost:3000)
+
+---
+
+11. **Next steps after full stack startup**
+
+* Browse the **Inbox** dashboard at [http://localhost:3000](http://localhost:3000).
+* Generate drafts with the **AI Draft Panel** or manually via **Manual Draft**.
+* Manage your **preferences** (tone, signature, style) in the **Settings** page.
+* Upload documents to the **Knowledge Base** via the **KB** page.
+* Provide feedback with the **Accept / Edit / Reject** buttons → feedback is logged in the backend.
 
 ---
 
