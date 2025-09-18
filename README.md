@@ -112,6 +112,11 @@ Goal: save time in email management by generating ready-to-send drafts with cons
 
    ```env
    NEXT_PUBLIC_API_BASE_URL=http://localhost:8001
+
+   # Email ingestion defaults
+   NEXT_PUBLIC_EMAIL_PROVIDER=gmail
+   NEXT_PUBLIC_EMAIL_UNREAD=false
+   NEXT_PUBLIC_EMAIL_N=50
    ```
 
 6. **Prepare Gmail API credentials**
