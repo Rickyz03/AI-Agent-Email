@@ -17,6 +17,7 @@ export default function ThreadDetailPage() {
     async function load() {
       try {
         const data = await fetchThreadById(id as string);
+        console.log("fetchThreadById:", data); // debug
         setEmails(data);
       } finally {
         setLoading(false);
@@ -27,15 +28,19 @@ export default function ThreadDetailPage() {
 
   if (loading) return <Loader />;
 
+  const latestEmail = emails.length ? emails[emails.length - 1] : undefined;
+
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-bold">Thread #{id}</h2>
       <div className="space-y-4">
-        {emails.map((email) => (
-          <EmailCard key={email.id} email={email} />
-        ))}
+      {emails.map((email) => (
+        <EmailCard key={email.id} email={email} />
+      ))}
       </div>
-      <DraftPanel />
+
+      {/* pass latestEmail and use key to force remount if id changes */}
+      <DraftPanel key={latestEmail?.id ?? "no-email"} email={latestEmail} />
     </div>
   );
 }

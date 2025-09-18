@@ -1,27 +1,57 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { generateDraft } from "../api/emails";
 import { EmailIn, DraftOut } from "../types/api";
 import Loader from "./Loader";
 import FeedbackButtons from "./FeedbackButtons";
 
-export default function DraftPanel() {
+type DraftPanelProps = {
+  email?: EmailIn;
+};
+
+export default function DraftPanel({ email }: DraftPanelProps) {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [drafts, setDrafts] = useState<DraftOut | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Helper: find the body in the email object with fallback
+  const extractBody = (e?: EmailIn) => {
+    if (!e) return "";
+    // Try multiple possible keys
+    return (
+      (e as any).body ??
+      (e as any).body_text ??
+      (e as any).bodyText ??
+      (e as any).bodyPlain ??
+      (e as any).body_text_plain ??
+      ""
+    );
+  };
+
+  const extractSubject = (e?: EmailIn) => {
+    if (!e) return "";
+    return (e as any).subject ?? (e as any).subject_text ?? "";
+  };
+
+  // Synchronize subject/body when the `email` prop changes
+  useEffect(() => {
+    console.log("DraftPanel email prop changed:", email);
+    setSubject(extractSubject(email));
+    setBody(extractBody(email));
+  }, [email]);
+
   async function handleGenerate() {
     setLoading(true);
     try {
-      const email: EmailIn = {
+      const emailPayload: EmailIn = {
         subject,
         body,
         from_addr: "me@example.com",
         to_addrs: ["you@example.com"],
-      };
-      const result = await generateDraft(email);
+      } as EmailIn;
+      const result = await generateDraft(emailPayload);
       setDrafts(result);
     } finally {
       setLoading(false);
