@@ -27,6 +27,8 @@ services:
     container_name: backend
     environment:
       TZ: Europe/Rome
+      DB_HOST: postgres-relational-db
+      CHROMA_HOST: chroma-vector-db
     env_file:
       - ./backend/.env
     depends_on:

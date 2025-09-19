@@ -13,12 +13,11 @@ RUN apt-get update && apt-get install -y \
     tzdata \
  && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
+# Copy requirements and install deps (the copy is kept separate for caching)
 COPY requirements.txt .
-
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the backend
+# Copy all backend files
 COPY . .
 
 # Expose port
