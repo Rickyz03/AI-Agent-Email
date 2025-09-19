@@ -211,6 +211,50 @@ Goal: save time in email management by generating ready-to-send drafts with cons
 
 ---
 
+## 🚀 Setup with Docker
+
+This project can be run entirely with Docker using **Docker Compose**, which starts up all the required services:
+- **Postgres** (relational database)
+- **Chroma** (vector database)
+- **Backend** (FastAPI)
+- **Frontend** (Next.js)
+
+### 1. Build and start the containers
+From the root of the repository, run:
+
+```bash
+docker compose up --build
+````
+
+This will:
+
+* build the **backend** (Python 3.13) and **frontend** (Next.js) images,
+* pull **Postgres 17** and the latest version of **Chroma**,
+* start all containers in a single network.
+
+### 2. Check running containers
+
+To verify that everything is up:
+
+```bash
+docker ps
+```
+
+You should see 4 containers: `postgres-relational-db`, `chroma-vector-db`, `backend`, `frontend`.
+
+### 3. Access the application
+
+Once all services are running:
+
+* **Frontend** is available at 👉 [http://localhost:3000](http://localhost:3000)
+* **Backend API** is available at 👉 [http://localhost:8001](http://localhost:8001)
+* **Chroma** runs on 👉 [http://localhost:8000](http://localhost:8000) (internal use)
+* **Postgres** runs on 👉 [http://localhost:5432](http://localhost:5432) (internal use)
+
+Now open [http://localhost:3000](http://localhost:3000) in your browser to start using the application🎉.
+
+---
+
 ## 📂 Project Structure
 
 ```
@@ -261,5 +305,5 @@ AI-Agent-Email/
 ├── docker-compose.yml           # Docker Compose configuration for local development
 ├── README.md                    # Main project documentation
 └── LICENSE                      # Software license
-````
+```
 
