@@ -256,10 +256,7 @@ AI-Agent-Email/
 │   ├── Dockerfile               # Docker image for frontend service
 │   ├── .env.local               # Environment variables for frontend configuration
 │   ├── package.json             # Project metadata and dependencies for Node.js
-│   ├── .gitignore               # Frontend files and folders to exclude from version control
-│   ├── tsconfig.json            # TypeScript configuration file
-│   ├── tailwind.config.js       # Configuration for Tailwind CSS
-│   └── next.config.js           # Configuration for Next.js
+│   └── .gitignore               # Frontend files and folders to exclude from version control
 │
 ├── docker-compose.yml           # Docker Compose configuration for local development
 ├── README.md                    # Main project documentation
