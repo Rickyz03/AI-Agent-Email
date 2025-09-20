@@ -5,13 +5,24 @@ Goal: save time in email management by generating ready-to-send drafts with cons
 
 ---
 
+## 📑 Indice
+
+- [AI Agent Email ✉️🤖](#ai-agent-email-)
+- [Features (MVP)](#-features-mvp)
+- [Tech Stack](#️-tech-stack)
+- [Local Setup (Dev)](#️-local-setup-dev)
+- [Setup con Docker](#-setup-with-docker)
+- [Project Structure](#-project-structure)
+
+---
+
 ## 🚀 Features (MVP)
-- Email ingestion from providers (IMAP/Gmail API).
-- Preprocessing: message body cleaning, signature and quote removal.
-- Intent/priority classification (info request, complaint, spam, etc.).
-- Draft generation (3 variants: brief, standard, detailed) via LLM.
-- Minimal web UI to view threads and drafts.
-- Feedback loop to learn from corrections.
+- **Email ingestion** from providers (IMAP/Gmail API).
+- **Preprocessing**: message body cleaning, signature and quote removal.
+- **Intent/priority classification** (info request, complaint, spam, etc.).
+- **Draft generation** (3 variants: brief, standard, detailed) via LLM.
+- **Minimal web UI** to view threads and drafts.
+- **Feedback loop** to learn from corrections.
 
 ---
 
