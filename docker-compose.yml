@@ -29,6 +29,7 @@ services:
       TZ: Europe/Rome
       DB_HOST: postgres-relational-db
       CHROMA_HOST: chroma-vector-db
+      DB_PORT: 5432
     env_file:
       - ./backend/.env
     depends_on:
