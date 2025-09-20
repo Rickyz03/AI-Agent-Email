@@ -7,12 +7,11 @@ Goal: save time in email management by generating ready-to-send drafts with cons
 
 ## 📑 Indice
 
-- [AI Agent Email ✉️🤖](#ai-agent-email-)
-- [Features (MVP)](#-features-mvp)
-- [Tech Stack](#️-tech-stack)
-- [Local Setup (Dev)](#️-local-setup-dev)
-- [Setup con Docker](#-setup-with-docker)
-- [Project Structure](#-project-structure)
+- [🚀 Features (MVP)](#-features-mvp)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [⚙️ Local Setup (Dev)](#️-local-setup-dev)
+- [🚀 Setup with Docker](#-setup-with-docker)
+- [📂 Project Structure](#-project-structure)
 
 ---
 
