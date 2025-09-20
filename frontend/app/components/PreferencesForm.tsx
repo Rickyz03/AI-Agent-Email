@@ -20,7 +20,7 @@ export default function PreferencesForm() {
         const data: PreferenceOut = await getPreferences();
         setPrefs(data);
       } catch {
-        // If no preferences exist yet, keep defaults
+        // If there are no preferences, keep the defaults
       } finally {
         setLoading(false);
       }
@@ -44,7 +44,7 @@ export default function PreferencesForm() {
         <span className="text-sm font-medium">Default Tone</span>
         <input
           type="text"
-          value={prefs.tone_default}
+          value={prefs.tone_default ?? ""}
           onChange={(e) =>
             setPrefs({ ...prefs, tone_default: e.target.value })
           }
@@ -56,7 +56,7 @@ export default function PreferencesForm() {
         <span className="text-sm font-medium">Sign-off</span>
         <input
           type="text"
-          value={prefs.sign_off}
+          value={prefs.sign_off ?? ""}
           onChange={(e) =>
             setPrefs({ ...prefs, sign_off: e.target.value })
           }
@@ -67,7 +67,7 @@ export default function PreferencesForm() {
       <label className="block">
         <span className="text-sm font-medium">Signature Block</span>
         <textarea
-          value={prefs.signature_block}
+          value={prefs.signature_block ?? ""}
           onChange={(e) =>
             setPrefs({ ...prefs, signature_block: e.target.value })
           }
