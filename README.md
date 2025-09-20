@@ -67,7 +67,7 @@ Goal: save time in email management by generating ready-to-send drafts with cons
        -e POSTGRES_USER=email-agent-user \
        -e POSTGRES_PASSWORD=email-agent-psw \
        -e POSTGRES_DB=email-agent-db \
-       -p 5432:5432 postgres
+       -p 5435:5432 postgres
      ```
 
    * **ChromaDB**
@@ -84,7 +84,7 @@ Goal: save time in email management by generating ready-to-send drafts with cons
    ```env
    # Database
    DB_HOST=localhost
-   DB_PORT=5432
+   DB_PORT=5435
    DB_USER=email-agent-user
    DB_PASSWORD=email-agent-psw
    DB_NAME=email-agent-db
